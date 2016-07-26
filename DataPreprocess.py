@@ -37,7 +37,7 @@ def writeOrignData(infiles, text_table):
                     line[8] = line[8][9:]
                     s = ','.join(line[1:8]) + '\n'
                     out_f.write(s)
-
+#todo.2007年数据有问题
 
 def dialogOpenFile():
     master = Tkinter.Tk()
