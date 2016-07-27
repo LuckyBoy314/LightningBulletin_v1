@@ -1,15 +1,15 @@
-# # -*- coding: utf-8 -*-
+# -*- coding: gb2312 -*-
 # import arcpy
 # from arcpy.sa import *
-# # todo.ÁªüËÆ°Áõ∏ÂÖ≥ÂèÇÊï∞
+# # todo.Õ≥º∆œ‡πÿ≤Œ ˝
 #
 # """
-#     "Ë∂äÂüé":
+#     "‘Ω≥«":
 # """
 # sta = {}
-# workspace =ur'D:\bulletinTemp\2015Âπ¥\ÁªçÂÖ¥Â∏Ç'
+# workspace =ur'D:\bulletinTemp\2015ƒÍ\…‹–À –'
 # arcpy.env.workspace  = workspace
-# infeature = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/ÁªçÂÖ¥Â∏Ç"
+# infeature = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/…‹–À –"
 # ZonalStatisticsAsTable(infeature,'NAME',"lightningDay.tif",'stat_day',"","ALL")
 # with arcpy.da.SearchCursor('stat_day',["NAME","MEAN","MIN","MAX"]) as cursor:
 #     for row in cursor:
@@ -21,26 +21,60 @@
 #          print row[0][:2],":",row[1],row[2],row[3]
 
 # import arcpy
-# #arcpy.env.workspace
-# arcpy.CreatePersonalGDB_management("E:/bulletinTemp", "GDB.mdb")
-# data = u'E:/bulletinTemp/2015Âπ¥/data2015Âπ¥.shp'
-# arcpy.FeatureClassToGeodatabase_conversion(data,'E:/bulletinTemp/GDB.mdb')
+#
+# arcpy.CreatePersonalGDB_management("/", "GDB.mdb")
+# data = u'D:/bulletinTemp/2015ƒÍ/data2015ƒÍ.shp'
+# arcpy.FeatureClassToGeodatabase_conversion(data,'/GDB.mdb')
 
 import pyodbc
+import win32com.client
 
-db = pyodbc.connect(
-    r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
-    + r'DBQ=E:/bulletinTemp/GDB.mdb')
+#¡¥Ω” ˝æ›ø‚
+#db = pyodbc.connect("DSN=<that Data Source I just created>")
+db = pyodbc.connect('DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};  DBQ=D:/GDB.mdb;')# Uid=Admin;Pwd=;')
+cursor = db.cursor()
+data_table = "data2015ƒÍ"
 
-cursor1 = db.execute("""
-    SELECT [count(*) as ‰∏™Êï∞, Region]
-    FROM [data2015Âπ¥]
-    WHERE [Region] = 'ÁªçÂÖ¥Â∏Ç'
-    GROUP BY [Region]""")
+#¥Úø™Excel”¶”√≥Ã–Ú
+excel = win32com.client.Dispatch('Excel.Application')
+excel.Visible = False
+#¥Úø™Œƒº˛£¨º¥Excelπ§◊˜±°
+workbook = excel.Workbooks.Open(ur'D:\Program Files (x86)\LightningBulletin\Data\…‹–À –¿◊µÁπ´±®Õº±Ì.xlsx')
 
-while 1:
-    row = cursor1.fetchone()
-    if not row:
-        break
-    print row.word
+
+#’„Ω≠∑÷µÿ«¯Õ≥º∆
+sql_regions = """
+SELECT count(*) AS num, Region
+FROM %s
+WHERE Province='’„Ω≠ °'
+GROUP BY Region
+ORDER BY count(*) DESC;
+"""%data_table
+
+results = {}
+for row in cursor.execute(sql_regions):
+    results[row[1]] = row[0]# “‘ Region£∫numΩ®¡¢◊÷µ‰£¨∑Ω±„œ¬√Ê∏≥÷µ
+
+sheet_regions = workbook.Worksheets(u' °µÿ«¯')
+for row in xrange(2,13):
+    region = sheet_regions.Cells(row,2).Value
+    sheet_regions.Cells(row,1).Value = results[region]
+
+
+#…‹–À∑÷œÿÕ≥º∆
+sql_counties = """
+SELECT count(*) AS num, County
+FROM %s
+WHERE Region='…‹–À –'
+GROUP BY County
+ORDER BY count(*) DESC;
+"""%data_table
+
+for row in cursor.execute(sql_counties):
+    print row[0],row[1]
+
+
+workbook.Save()
+workbook.Close()
+excel.Quit()
 db.close()

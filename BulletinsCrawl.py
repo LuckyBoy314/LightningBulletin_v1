@@ -106,6 +106,7 @@ def crawl(headers,n,outfile):
                     print "Error:", url
             page_num += 1
 
+#todo 如何自动获取coookies
 
 if __name__ == "__main__":
     cookie = cookielib.CookieJar()
