@@ -36,7 +36,7 @@ db = pyodbc.connect(''.join(['DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};
                              'DBQ=', cwd, '/Data/GDB.mdb;']))  # Uid=Admin;Pwd=;')
 cursor = db.cursor()
 
-data_table = ''.join(['data',str(year),'Äê'])#sql²éÑ¯Óï¾ä²»ÓÃÊ¹ÓÃUnicode
+data_table = ''.join(['data', str(year), 'Äê'])  # sql²éÑ¯Óï¾ä²»ÓÃÊ¹ÓÃUnicode
 
 # ´ò¿ªExcelÓ¦ÓÃ³ÌĞò
 excel = win32com.client.Dispatch('Excel.Application')
@@ -78,7 +78,7 @@ sheet = workbook.Worksheets(u'ÊĞ·ÖÇøÍ³¼Æ')
 for row in xrange(2, 8):
     sheet.Cells(row, 1).Value = results[sheet.Cells(row, 2).Value]
 
-#todo SQL²éÑ¯ÓĞ´ıÓÅ»¯
+# todo SQL²éÑ¯ÓĞ´ıÓÅ»¯
 # ************·ÖÔÂÍ³¼Æ ÔÂµØÉÁ´ÎÊıºÍÔÂÆ½¾ùÇ¿¶È(¸ºÉÁ)**************
 sql = """
 SELECT count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,1 AS ÔÂ·İ
@@ -118,15 +118,14 @@ union SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,12 AS 
 FROM QUERY_TABLE
 WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/12/1# AND Date_<=#YEAR/12/31#
 ORDER BY ÔÂ·İ
-""".replace('QUERY_TABLE',data_table).replace('YEAR',str(year))
+""".replace('QUERY_TABLE', data_table).replace('YEAR', str(year))
 
 sheet = workbook.Worksheets(u'·ÖÔÂÍ³¼Æ')
-i =1#ĞĞºÅ
+i = 1  # ĞĞºÅ
 for row in cursor.execute(sql):
-    i+=1
-    sheet.Cells(i,2).Value = row[0]#¸ºÉÁ´ÎÊı
-    sheet.Cells(i,5).Value = row[1] if row[1] is not None else 0#¸ºÉÁÇ¿¶È
-
+    i += 1
+    sheet.Cells(i, 2).Value = row[0]  # ¸ºÉÁ´ÎÊı
+    sheet.Cells(i, 5).Value = row[1] if row[1] is not None else 0  # ¸ºÉÁÇ¿¶È
 
 # ************·ÖÔÂÍ³¼Æ ÔÂµØÉÁ´ÎÊıºÍÔÂÆ½¾ùÇ¿¶È(ÕıÉÁ)**************
 sql = """
@@ -167,13 +166,13 @@ union SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,12 AS ÔÂ
 FROM QUERY_TABLE
 WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/12/1# AND Date_<=#YEAR/12/31#
 ORDER BY ÔÂ·İ
-""".replace('QUERY_TABLE',data_table).replace('YEAR',str(year))
+""".replace('QUERY_TABLE', data_table).replace('YEAR', str(year))
 
-i =1#ĞĞºÅ
+i = 1  # ĞĞºÅ
 for row in cursor.execute(sql):
-    i+=1
-    sheet.Cells(i,3).Value = row[0]#ÕıÉÁ´ÎÊı
-    sheet.Cells(i,6).Value = row[1] if row[1] is not None else 0 #ÕıÉÁÇ¿¶È
+    i += 1
+    sheet.Cells(i, 3).Value = row[0]  # ÕıÉÁ´ÎÊı
+    sheet.Cells(i, 6).Value = row[1] if row[1] is not None else 0  # ÕıÉÁÇ¿¶È
 
 # ************·ÖÊ±¶ÎÍ³¼Æ Ê±¶ÎµØÉÁ´ÎÊıºÍÊ±¶ÎÆ½¾ùÇ¿¶È(¸ºÉÁ)**************
 sql = """
@@ -250,15 +249,14 @@ union SELECT count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,23 AS Ê
 FROM QUERY_TABLE
 WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Val(Time_)=23
 ORDER BY Ê±¶Î
-""".replace('QUERY_TABLE',data_table)
+""".replace('QUERY_TABLE', data_table)
 
 sheet = workbook.Worksheets(u'·ÖÊ±¶ÎÍ³¼Æ')
-i =1#ĞĞºÅ
+i = 1  # ĞĞºÅ
 for row in cursor.execute(sql):
-    i+=1
-    sheet.Cells(i,2).Value = row[0]#¸ºÉÁ´ÎÊı
-    sheet.Cells(i,5).Value = row[1] if row[1] is not None else 0#¸ºÉÁÇ¿¶È
-
+    i += 1
+    sheet.Cells(i, 2).Value = row[0]  # ¸ºÉÁ´ÎÊı
+    sheet.Cells(i, 5).Value = row[1] if row[1] is not None else 0  # ¸ºÉÁÇ¿¶È
 
 # ************·ÖÊ±¶ÎÍ³¼Æ Ê±¶ÎµØÉÁ´ÎÊıºÍÊ±¶ÎÆ½¾ùÇ¿¶È(ÕıÉÁ)**************
 sql = """
@@ -335,16 +333,15 @@ union SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,23 AS Ê±
 FROM QUERY_TABLE
 WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Val(Time_)=23
 ORDER BY Ê±¶Î
-""".replace('QUERY_TABLE',data_table)
+""".replace('QUERY_TABLE', data_table)
 
-i =1#ĞĞºÅ
+i = 1  # ĞĞºÅ
 for row in cursor.execute(sql):
-    i+=1
-    sheet.Cells(i,3).Value = row[0]#ÕıÉÁ´ÎÊı
-    sheet.Cells(i,6).Value = row[1] if row[1] is not None else 0#ÕıÉÁÇ¿¶È
+    i += 1
+    sheet.Cells(i, 3).Value = row[0]  # ÕıÉÁ´ÎÊı
+    sheet.Cells(i, 6).Value = row[1] if row[1] is not None else 0  # ÕıÉÁÇ¿¶È
 
-
-#**********¸ºÉÁÇ¿¶È·Ö²¼**************
+# **********¸ºÉÁÇ¿¶È·Ö²¼**************
 sql = """
 SELECT count(*) AS ¸ºÉÁ´ÎÊı,0 AS ×ó±ß½ç,5 AS ÓÒ±ß½ç
 FROM QUERY_TABLE
@@ -422,15 +419,15 @@ UNION SELECT count(*) AS ¸ºÉÁ´ÎÊı,300,1000
 FROM QUERY_TABLE
 WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Abs(Intensity)>=300
 ORDER BY ×ó±ß½ç
-""".replace("QUERY_TABLE",data_table)
+""".replace("QUERY_TABLE", data_table)
 
 sheet = workbook.Worksheets(u'Ç¿¶È·Ö²¼Í³¼Æ')
-i =1#ĞĞºÅ
+i = 1  # ĞĞºÅ
 for row in cursor.execute(sql):
-    i+=1
-    sheet.Cells(i,3).Value = row[0]#¸ºÉÁ´ÎÊı
+    i += 1
+    sheet.Cells(i, 3).Value = row[0]  # ¸ºÉÁ´ÎÊı
 
-#***********ÕıÉÁÇ¿¶È·Ö²¼************
+# ***********ÕıÉÁÇ¿¶È·Ö²¼************
 sql = """
 SELECT count(*) AS ÕıÉÁ´ÎÊı,0 AS ×ó±ß½ç,5 AS ÓÒ±ß½ç
 FROM QUERY_TABLE
@@ -508,12 +505,12 @@ UNION SELECT count(*) AS ÕıÉÁ´ÎÊı,300,1000
 FROM QUERY_TABLE
 WHERE Region='ÉÜĞËÊĞ' AND Intensity>=300
 ORDER BY ×ó±ß½ç
-""".replace("QUERY_TABLE",data_table)
+""".replace("QUERY_TABLE", data_table)
 
-i =1#ĞĞºÅ
+i = 1  # ĞĞºÅ
 for row in cursor.execute(sql):
-    i+=1
-    sheet.Cells(i,4).Value = row[0]#ÕıÉÁ´ÎÊı
+    i += 1
+    sheet.Cells(i, 4).Value = row[0]  # ÕıÉÁ´ÎÊı
 
 workbook.Save()  # ±£´æEXCEL¹¤×÷±¡
 workbook.Close()  # ¹Ø±Õ¹¤×÷±¡ÎÄ¼ş
