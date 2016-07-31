@@ -182,7 +182,7 @@ def mappingProcess(target_area, datetime, density_class=None, day_class=10, out_
 if __name__ == "__main__":
     datetime = u"2015年"
     target_area = u"绍兴市"
-    workspace = u"D:/bulletinTemp/" + datetime + u"/" + target_area
+    workspace = ''.join([u"D:/bulletinTemp/",datetime,u"/",target_area])
     # 设置环境
     if not os.path.exists(workspace):
         os.makedirs(workspace)
