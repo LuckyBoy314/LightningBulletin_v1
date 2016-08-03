@@ -3,12 +3,12 @@
 # from arcpy.sa import *
 #
 # """
-#     "Ô½³Ç":
+#     "è¶ŠåŸ":
 # """
 # sta = {}
-# workspace =ur'D:\bulletinTemp\2015Äê\ÉÜĞËÊĞ'
+# workspace =ur'D:\bulletinTemp\2015å¹´\ç»å…´å¸‚'
 # arcpy.env.workspace  = workspace
-# infeature = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/ÉÜĞËÊĞ"
+# infeature = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/ç»å…´å¸‚"
 # ZonalStatisticsAsTable(infeature,'NAME',"lightningDay.tif",'stat_day',"","ALL")
 # with arcpy.da.SearchCursor('stat_day',["NAME","MEAN","MIN","MAX"]) as cursor:
 #     for row in cursor:
@@ -22,7 +22,7 @@
 # import arcpy
 #
 # arcpy.CreatePersonalGDB_management(''.join([cwd,'/data']), "GDB.mdb")
-# data = u'D:/bulletinTemp/2015Äê/data2015Äê.shp'
+# data = u'D:/bulletinTemp/2015å¹´/data2015å¹´.shp'
 # arcpy.FeatureClassToGeodatabase_conversion(data,''.join([cwd,'/data','/GDB.mdb']))
 
 import pyodbc
@@ -30,93 +30,93 @@ import os
 from win32com.client import DispatchEx, constants
 from win32com.client.gencache import EnsureDispatch
 
-#²ÎÊı
+#å‚æ•°
 year = 2015
-target_area = u'ÉÜĞËÊĞ'
+target_area = u'ç»å…´å¸‚'
 area = 8256.0
-province_area = {u'º¼ÖİÊĞ':16596.0,u'Äş²¨ÊĞ':9365.0,u'ÎÂÖİÊĞ':11784.0,u'ºşÖİÊĞ':5794.0,u'¼ÎĞËÊĞ':3915.0,
-u'ÉÜĞËÊĞ':8256.0,u'½ğ»ªÊĞ':10919.0,u'Ì¨ÖİÊĞ':9413.0,u'ÖÛÉ½ÊĞ':1440.0,u'áéÖİÊĞ':8837.0,u'ÀöË®ÊĞ':17298.0}
-region_area = {u'Ô½³ÇÇø':498.0,u'¿ÂÇÅÇø':1041.0,u'ÉÏÓİÇø':1403.0,u'ÖîôßÊĞ':2311.0,u'áÓÖİÊĞ':1790.0,u'ĞÂ²ıÏØ':1213.0}
+province_area = {u'æ­å·å¸‚':16596.0,u'å®æ³¢å¸‚':9365.0,u'æ¸©å·å¸‚':11784.0,u'æ¹–å·å¸‚':5794.0,u'å˜‰å…´å¸‚':3915.0,
+u'ç»å…´å¸‚':8256.0,u'é‡‘åå¸‚':10919.0,u'å°å·å¸‚':9413.0,u'èˆŸå±±å¸‚':1440.0,u'è¡¢å·å¸‚':8837.0,u'ä¸½æ°´å¸‚':17298.0}
+region_area = {u'è¶ŠåŸåŒº':498.0,u'æŸ¯æ¡¥åŒº':1041.0,u'ä¸Šè™åŒº':1403.0,u'è¯¸æš¨å¸‚':2311.0,u'åµŠå·å¸‚':1790.0,u'æ–°æ˜Œå¿':1213.0}
 
-#todo ¸÷µØÇøÃæ»ıÒª°üÀ¨º£ÓòÃæ»ı
+#todo å„åœ°åŒºé¢ç§¯è¦åŒ…æ‹¬æµ·åŸŸé¢ç§¯
 
-cwd = os.getcwd()  # »ñÈ¡µ±Ç°¹¤×÷Ä¿Â¼£¬±ãÓÚ³ÌĞòÒÆÖ²
-# Á´½ÓÊı¾İ¿â
+cwd = os.getcwd()  # è·å–å½“å‰å·¥ä½œç›®å½•ï¼Œä¾¿äºç¨‹åºç§»æ¤
+# é“¾æ¥æ•°æ®åº“
 db = pyodbc.connect(''.join(['DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};',
                              'DBQ=', cwd, '/Data/GDB.mdb;']))  # Uid=Admin;Pwd=;')
 cursor = db.cursor()
 
-data_table = ''.join(['data', str(year), 'Äê'])  # sql²éÑ¯Óï¾ä²»ÓÃÊ¹ÓÃUnicode
+data_table = ''.join(['data', str(year), 'å¹´'])  # sqlæŸ¥è¯¢è¯­å¥ä¸ç”¨ä½¿ç”¨Unicode
 
-# ´ò¿ªExcelÓ¦ÓÃ³ÌĞò
+# æ‰“å¼€Excelåº”ç”¨ç¨‹åº
 excel = DispatchEx('Excel.Application')
 excel.Visible = False
-# ´ò¿ªÎÄ¼ş£¬¼´Excel¹¤×÷±¡
-workbook = excel.Workbooks.Open(''.join([cwd, u'/Data/¹«±¨Í¼±íÄ£°å.xlsx']))
+# æ‰“å¼€æ–‡ä»¶ï¼Œå³Excelå·¥ä½œè–„
+workbook = excel.Workbooks.Open(''.join([cwd, u'/Data/å…¬æŠ¥å›¾è¡¨æ¨¡æ¿.xlsx']))
 
 EnsureDispatch('Word.Application')
 word = DispatchEx('Word.Application')
 word.Visible = False
-doc = word.Documents.Open(''.join([cwd, u'/Data/¹«±¨Ä£°å.docx']))
+doc = word.Documents.Open(''.join([cwd, u'/Data/å…¬æŠ¥æ¨¡æ¿.docx']))
 
 try:
-    # ************Õã½­·ÖµØÇøÍ³¼Æ**********
+    # ************æµ™æ±Ÿåˆ†åœ°åŒºç»Ÿè®¡**********
     sql = """
     SELECT count(*) AS num, Region
     FROM %s
-    WHERE Province='Õã½­Ê¡'
+    WHERE Province='æµ™æ±Ÿçœ'
     GROUP BY Region
     ORDER BY count(*) DESC
     """ % data_table
 
-    #´¦ÀíSQL²éÑ¯½á¹û£¬Ë³±ã¼ÇÂ¼±¾µØÇøµØÉÁ´ÎÊıÔÚÈ«Ê¡µÄÅÅÃû
+    #å¤„ç†SQLæŸ¥è¯¢ç»“æœï¼Œé¡ºä¾¿è®°å½•æœ¬åœ°åŒºåœ°é—ªæ¬¡æ•°åœ¨å…¨çœçš„æ’å
     results = {}
     rank = 0
     for row in cursor.execute(sql):
-        results[row[1]] = row[0]  # ÒÔ Region£ºnum½¨Á¢×Öµä£¬·½±ãÏÂÃæ¸³Öµ
+        results[row[1]] = row[0]  # ä»¥ Regionï¼šnumå»ºç«‹å­—å…¸ï¼Œæ–¹ä¾¿ä¸‹é¢èµ‹å€¼
         rank+=1
         if row [1] == target_area:
-            sum_rank_in_province = rank #±¾µØÇøµØÉÁ´ÎÊıÔÚÈ«Ê¡µÄÅÅÃû
+            sum_rank_in_province = rank #æœ¬åœ°åŒºåœ°é—ªæ¬¡æ•°åœ¨å…¨çœçš„æ’å
 
-    #½«SQL²éÑ¯½á¹ûĞ´ÈëExcel
-    sheet = workbook.Worksheets(u'Ê¡·ÖÇøÍ³¼Æ')
+    #å°†SQLæŸ¥è¯¢ç»“æœå†™å…¥Excel
+    sheet = workbook.Worksheets(u'çœåˆ†åŒºç»Ÿè®¡')
     for row in xrange(2, 13):
         sheet.Cells(row, 1).Value = results[sheet.Cells(row, 2).Value]
 
-    sum_region = results[target_area]  #±¾µØÇøµØÉÁ×ÜÊı
-    density_region = sum_region/area  #±¾µØÇøµØÉÁÃÜ¶È
+    sum_region = results[target_area]  #æœ¬åœ°åŒºåœ°é—ªæ€»æ•°
+    density_region = sum_region/area  #æœ¬åœ°åŒºåœ°é—ªå¯†åº¦
 
-    #¼ÆËãÈ«Ê¡¸÷µØÇøµØÉÁÃÜ¶ÈºÍÈ«Ê¡Æ½¾ùÃÜ¶È
+    #è®¡ç®—å…¨çœå„åœ°åŒºåœ°é—ªå¯†åº¦å’Œå…¨çœå¹³å‡å¯†åº¦
     density_province_dict = {}
     density_province = 0
     for key in results:
         density_province_dict[key] = results[key]/province_area[key]
         density_province+= density_province_dict[key]
-    density_province/=len(province_area) #È«Ê¡Æ½¾ùµØÉÁÃÜ¶È
-    #ÃÜ¶È´Ó´óµ½Ğ¡½øĞĞÅÅĞò
+    density_province/=len(province_area) #å…¨çœå¹³å‡åœ°é—ªå¯†åº¦
+    #å¯†åº¦ä»å¤§åˆ°å°è¿›è¡Œæ’åº
     density_province_sorted = sorted(density_province_dict.iteritems(),key = lambda d:d[1],reverse=True)
-    #¼ÆËã±¾µØÇøµØÉÁÃÜ¶ÈÅÅÃû
+    #è®¡ç®—æœ¬åœ°åŒºåœ°é—ªå¯†åº¦æ’å
     rank = 0
     for item in density_province_sorted:
         rank+=1
         if item[0] == target_area:
-            density_rank_in_province = rank #±¾µØÇøµØÉÁÃÜ¶ÈÔÚÈ«Ê¡µÄÅÅÃû
+            density_rank_in_province = rank #æœ¬åœ°åŒºåœ°é—ªå¯†åº¦åœ¨å…¨çœçš„æ’å
             break
 
-    # ********* ÉÜĞË·ÖÏØÍ³¼Æ***********
+    # ********* ç»å…´åˆ†å¿ç»Ÿè®¡***********
     sql = """
     SELECT count(*) AS num, County
     FROM %s
-    WHERE Region='ÉÜĞËÊĞ'
+    WHERE Region='ç»å…´å¸‚'
     GROUP BY County
     ORDER BY count(*) DESC
     """ % data_table
-    #´¦ÀíSQL²éÑ¯½á¹û£¬Ë³±ã¼ÇÂ¼µØÉÁ´ÎÊıµÄ×î´óºÍ×îĞ¡Öµ
+    #å¤„ç†SQLæŸ¥è¯¢ç»“æœï¼Œé¡ºä¾¿è®°å½•åœ°é—ªæ¬¡æ•°çš„æœ€å¤§å’Œæœ€å°å€¼
     results = {}
     rank = 0
     num_region = len(region_area)
     for row in cursor.execute(sql):
-        results[row[1]] = row[0]  # ÒÔ Region£ºnum½¨Á¢×Öµä£¬·½±ãÏÂÃæ¸³Öµ
+        results[row[1]] = row[0]  # ä»¥ Regionï¼šnumå»ºç«‹å­—å…¸ï¼Œæ–¹ä¾¿ä¸‹é¢èµ‹å€¼
         rank+=1
         if rank ==1:
             sum_max_county = row[1]
@@ -124,146 +124,146 @@ try:
         elif rank == num_region:
             sum_min_county = row[1]
             sum_min_region = row[0]
-    #SQL²éÑ¯½á¹ûĞ´ÈëExcel
-    sheet = workbook.Worksheets(u'ÊĞ·ÖÇøÍ³¼Æ')
+    #SQLæŸ¥è¯¢ç»“æœå†™å…¥Excel
+    sheet = workbook.Worksheets(u'å¸‚åˆ†åŒºç»Ÿè®¡')
     for row in xrange(2, 8):
         sheet.Cells(row, 1).Value = results[sheet.Cells(row, 2).Value]
-    #¼ÆËã×î´ó¡¢×îĞ¡ÖµµÄÕ¼×ÜÊıµÄ±ÈÀı
+    #è®¡ç®—æœ€å¤§ã€æœ€å°å€¼çš„å æ€»æ•°çš„æ¯”ä¾‹
     max_region_percent = sum_max_region/float(sum_region)*100
     min_region_percent = sum_min_region/float(sum_region)*100
 
-    #¼ÆËã±¾µØÇø¸÷ÏØÊĞµØÉÁÃÜ¶È
+    #è®¡ç®—æœ¬åœ°åŒºå„å¿å¸‚åœ°é—ªå¯†åº¦
     density_region_dict = {}
     for key in results:
         density_region_dict[key] = results[key]/region_area[key]
-    #ÃÜ¶È´Ó´óµ½Ğ¡½øĞĞÅÅĞò
+    #å¯†åº¦ä»å¤§åˆ°å°è¿›è¡Œæ’åº
     density_region_sorted = sorted(density_region_dict.iteritems(),key = lambda d:d[1],reverse=True)
-    #×î´ó¡¢×îĞ¡ÃÜ¶È
+    #æœ€å¤§ã€æœ€å°å¯†åº¦
     density_max_county = density_region_sorted[0][0]
     density_max_region = density_region_sorted[0][1]
     density_min_county = density_region_sorted[num_region-1][0]
     density_min_region = density_region_sorted[num_region-1][1]
 
-    # todo SQL²éÑ¯ÓĞ´ıÓÅ»¯
-    # ************·ÖÔÂÍ³¼Æ ÔÂµØÉÁ´ÎÊıºÍÔÂÆ½¾ùÇ¿¶È(¸ºÉÁ)**************
+    # todo SQLæŸ¥è¯¢æœ‰å¾…ä¼˜åŒ–
+    # ************åˆ†æœˆç»Ÿè®¡ æœˆåœ°é—ªæ¬¡æ•°å’Œæœˆå¹³å‡å¼ºåº¦(è´Ÿé—ª)**************
     sql = """
-    SELECT count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,1 AS ÔÂ·İ
+    SELECT count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,1 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/1/1# AND Date_< #YEAR/2/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,2 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/1/1# AND Date_< #YEAR/2/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,2 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/2/1# AND Date_< #YEAR/3/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,3 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/2/1# AND Date_< #YEAR/3/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,3 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/3/1# AND Date_< #YEAR/4/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,4 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/3/1# AND Date_< #YEAR/4/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,4 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/4/1# AND Date_< #YEAR/5/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,5 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/4/1# AND Date_< #YEAR/5/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,5 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/5/1# AND Date_< #YEAR/6/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,6 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/5/1# AND Date_< #YEAR/6/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,6 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/6/1# AND Date_< #YEAR/7/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,7 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/6/1# AND Date_< #YEAR/7/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,7 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/7/1# AND Date_< #YEAR/8/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,8 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/7/1# AND Date_< #YEAR/8/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,8 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/8/1# AND Date_< #YEAR/9/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,9 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/8/1# AND Date_< #YEAR/9/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,9 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/9/1# AND Date_< #YEAR/10/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,10 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/9/1# AND Date_< #YEAR/10/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,10 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/10/1# AND Date_< #YEAR/11/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,11 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/10/1# AND Date_< #YEAR/11/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,11 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/11/1# AND Date_< #YEAR/12/1#
-    UNION SELECT  count(*) AS ¸ºÉÁ´ÎÊı, -sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,12 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/11/1# AND Date_< #YEAR/12/1#
+    UNION SELECT  count(*) AS è´Ÿé—ªæ¬¡æ•°, -sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,12 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity<0 AND Date_>=#YEAR/12/1# AND Date_<=#YEAR/12/31#
-    ORDER BY ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity<0 AND Date_>=#YEAR/12/1# AND Date_<=#YEAR/12/31#
+    ORDER BY æœˆä»½
     """.replace('QUERY_TABLE', data_table).replace('YEAR', str(year))
 
-    sheet = workbook.Worksheets(u'·ÖÔÂÍ³¼Æ')
-    i = 1  # ĞĞºÅ
+    sheet = workbook.Worksheets(u'åˆ†æœˆç»Ÿè®¡')
+    i = 1  # è¡Œå·
     month = 0
     sum_month_dict = {}
     negative_intensity_dict= {}
     for row in cursor.execute(sql):
         i += 1
         month+=1
-        sheet.Cells(i, 2).Value = row[0]  # ¸ºÉÁ´ÎÊı
-        sheet.Cells(i, 5).Value = negative_intensity_dict[month] = row[1] if row[1] is not None else 0  # ¸ºÉÁÇ¿¶È
+        sheet.Cells(i, 2).Value = row[0]  # è´Ÿé—ªæ¬¡æ•°
+        sheet.Cells(i, 5).Value = negative_intensity_dict[month] = row[1] if row[1] is not None else 0  # è´Ÿé—ªå¼ºåº¦
         sum_month_dict[month] = row[0]
 
-    #¸ºÉÁÇ¿¶È·åÖµËùÔÚÔÂ·İ
+    #è´Ÿé—ªå¼ºåº¦å³°å€¼æ‰€åœ¨æœˆä»½
     negative_intensity_sorted = sorted(negative_intensity_dict.iteritems(),key = lambda d:d[1],reverse=True)
     peak_month_negative_intensity = negative_intensity_sorted[0][0]
-    # ************·ÖÔÂÍ³¼Æ ÔÂµØÉÁ´ÎÊıºÍÔÂÆ½¾ùÇ¿¶È(ÕıÉÁ)**************
+    # ************åˆ†æœˆç»Ÿè®¡ æœˆåœ°é—ªæ¬¡æ•°å’Œæœˆå¹³å‡å¼ºåº¦(æ­£é—ª)**************
     sql = """
-    SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,1 AS ÔÂ·İ
+    SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,1 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/1/1# AND Date_< #YEAR/2/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,2 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/1/1# AND Date_< #YEAR/2/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,2 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/2/1# AND Date_< #YEAR/3/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,3 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/2/1# AND Date_< #YEAR/3/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,3 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/3/1# AND Date_< #YEAR/4/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,4 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/3/1# AND Date_< #YEAR/4/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,4 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/4/1# AND Date_< #YEAR/5/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,5 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/4/1# AND Date_< #YEAR/5/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,5 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/5/1# AND Date_< #YEAR/6/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,6 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/5/1# AND Date_< #YEAR/6/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,6 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/6/1# AND Date_< #YEAR/7/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,7 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/6/1# AND Date_< #YEAR/7/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,7 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/7/1# AND Date_< #YEAR/8/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,8 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/7/1# AND Date_< #YEAR/8/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,8 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/8/1# AND Date_< #YEAR/9/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,9 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/8/1# AND Date_< #YEAR/9/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,9 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/9/1# AND Date_< #YEAR/10/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,10 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/9/1# AND Date_< #YEAR/10/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,10 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/10/1# AND Date_< #YEAR/11/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,11 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/10/1# AND Date_< #YEAR/11/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,11 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/11/1# AND Date_< #YEAR/12/1#
-    UNION SELECT count(*) AS ÕıÉÁ´ÎÊı, sum(Intensity)/count(*) AS Æ½¾ùÇ¿¶È ,12 AS ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/11/1# AND Date_< #YEAR/12/1#
+    UNION SELECT count(*) AS æ­£é—ªæ¬¡æ•°, sum(Intensity)/count(*) AS å¹³å‡å¼ºåº¦ ,12 AS æœˆä»½
     FROM QUERY_TABLE
-    WHERE Region='ÉÜĞËÊĞ' AND Intensity>=0 AND Date_>=#YEAR/12/1# AND Date_<=#YEAR/12/31#
-    ORDER BY ÔÂ·İ
+    WHERE Region='ç»å…´å¸‚' AND Intensity>=0 AND Date_>=#YEAR/12/1# AND Date_<=#YEAR/12/31#
+    ORDER BY æœˆä»½
     """.replace('QUERY_TABLE', data_table).replace('YEAR', str(year))
-    i = 1  # ĞĞºÅ
+    i = 1  # è¡Œå·
     month = 0
-    positive_intensity_dict = {}#¼ÇÂ¼ÕıÉÁÇ¿¶È
+    positive_intensity_dict = {}#è®°å½•æ­£é—ªå¼ºåº¦
     for row in cursor.execute(sql):
         i += 1
         month+=1
-        sheet.Cells(i, 3).Value = row[0]  # ÕıÉÁ´ÎÊı
-        sheet.Cells(i, 6).Value = positive_intensity_dict[month] = row[1] if row[1] is not None else 0  # ÕıÉÁÇ¿¶È
+        sheet.Cells(i, 3).Value = row[0]  # æ­£é—ªæ¬¡æ•°
+        sheet.Cells(i, 6).Value = positive_intensity_dict[month] = row[1] if row[1] is not None else 0  # æ­£é—ªå¼ºåº¦
         sum_month_dict[month] += row[0]
 
-    #¸ºÉÁ·åÖµÔÂ·İ
+    #è´Ÿé—ªå³°å€¼æœˆä»½
     positive_intensity_sorted = sorted(positive_intensity_dict.iteritems(),key = lambda d:d[1],reverse=True)
     peak_month_positive_intensity = positive_intensity_sorted[0][0]
 
     sum_month_sorted = sorted(sum_month_dict.iteritems(),key = lambda d:d[1],reverse=True)
-    #µØÉÁ´ÎÊı×î¶àµÄÔÂ·İ
+    #åœ°é—ªæ¬¡æ•°æœ€å¤šçš„æœˆä»½
     max_month_region = sum_month_sorted[0][0]
-    #µØÉÁ´ÎÊı×î¶àµÄÈı¸öÔÂ
+    #åœ°é—ªæ¬¡æ•°æœ€å¤šçš„ä¸‰ä¸ªæœˆ
     max_months = [sum_month_sorted[0][0],sum_month_sorted[1][0],sum_month_sorted[2][0]]
     max_months.sort()
-    #µØÉÁ´ÎÊı×î¶àÈı¸öÔÂËùÕ¼±ÈÀı
+    #åœ°é—ªæ¬¡æ•°æœ€å¤šä¸‰ä¸ªæœˆæ‰€å æ¯”ä¾‹
     max_months_percent = 100*(sum_month_sorted[0][1]+sum_month_sorted[1][1]+sum_month_sorted[2][1])/float(sum_region)
-    #Ã»ÓĞ¼ì²âµ½µØÉÁµÄÔÂ·İ
+    #æ²¡æœ‰æ£€æµ‹åˆ°åœ°é—ªçš„æœˆä»½
     months_zero = [i[0] for i in sum_month_sorted if i[1]== 0]
     months_zero.sort()
 
@@ -280,117 +280,120 @@ try:
     sum_region_lastyear = 22122
     day_region = 40
     if 0.05<=(sum_region-sum_region_lastyear)/float(sum_region)<0.1:
-        compare_with_lastyear = u'ÂÔÓĞÔö¶à'
+        compare_with_lastyear = u'ç•¥æœ‰å¢å¤š'
     elif -0.1<(sum_region-sum_region_lastyear)/float(sum_region)<=-0.05:
-        compare_with_lastyear = u'ÂÔÓĞ½ÏÉÙ'
+        compare_with_lastyear = u'ç•¥æœ‰è¾ƒå°‘'
     elif 0.1<=(sum_region-sum_region_lastyear)/float(sum_region)<0.5:
-        compare_with_lastyear = u'ÓĞËùÔö¶à'
+        compare_with_lastyear = u'æœ‰æ‰€å¢å¤š'
     elif -0.5<(sum_region-sum_region_lastyear)/float(sum_region)<=-0.1:
-        compare_with_lastyear = u'ÓĞËù½ÏÉÙ'
+        compare_with_lastyear = u'æœ‰æ‰€è¾ƒå°‘'
     elif 0.5<=(sum_region-sum_region_lastyear)/float(sum_region)<0.9:
-        compare_with_lastyear = u'Ôö·ù½Ï´ó'
+        compare_with_lastyear = u'å¢å¹…è¾ƒå¤§'
     elif -0.9<(sum_region-sum_region_lastyear)/float(sum_region)<=-0.5:
-        compare_with_lastyear = u'¼õ·ù½Ï´ó'
+        compare_with_lastyear = u'å‡å¹…è¾ƒå¤§'
     elif 0.9<=(sum_region-sum_region_lastyear)/float(sum_region):
-        compare_with_lastyear = u'´ó·ùÔö¶à'
+        compare_with_lastyear = u'å¤§å¹…å¢å¤š'
     elif (sum_region-sum_region_lastyear)/float(sum_region)<=-0.9:
-        compare_with_lastyear = u'´ó·ù¼õÉÙ'
+        compare_with_lastyear = u'å¤§å¹…å‡å°‘'
     else:
-        compare_with_lastyear = u'»ù±¾³ÖÆ½'
+        compare_with_lastyear = u'åŸºæœ¬æŒå¹³'
 
     if density_region>density_province:
-        compare_with_province = u'¸ßÓÚ'
+        compare_with_province = u'é«˜äº'
     else:
-        compare_with_province = u'µÍÓÚ'
+        compare_with_province = u'ä½äº'
 
-    p24 = u'%dÄêÎÒÊĞ¹²·¢ÉúµØÉÁ%d´Î£¬Æ½¾ùµØÉÁÃÜ¶È%.2f´Î/km?£¬Æ½¾ùÀ×±©ÈÕ%dÌì£¨¼û±í1-1£©¡£\
-ÓëÉÏÄêµÄµØÉÁ%d´ÎÏà±È£¬%s¡£´ÓÊ±¼ä·Ö²¼À´¿´£¬µØÉÁÖ÷Òª¼¯ÖĞÔÚ%d¡¢%d¡¢%dÔÂ£¬\
-Èı¸öÔÂµØÉÁÕ¼È«Äê×ÜµØÉÁ´ÎÊıµÄ%.2f%%¡£´Ó¿Õ¼ä·Ö²¼À´¿´£¬%s·¢ÉúµØÉÁ´ÎÊı×î¶à£¬%s×îÉÙ¡£\
-È«ÊĞµØÉÁÆ½¾ùÃÜ¶È%sÈ«Ê¡Æ½¾ùµÄ%.2f´Î/km?£¬ÔÚÈ«Ê¡¸÷ÊĞÖĞ%sÉÁ´ÎÊıÅÅµÚ%dÎ»£¬\
-µØÉÁÆ½¾ùÃÜ¶ÈÅÅµÚ%dÎ»£¨¼û±í1-2£©¡£'% (year,sum_region,density_region,day_region,
+    p24 = u'%då¹´æˆ‘å¸‚å…±å‘ç”Ÿåœ°é—ª%dæ¬¡ï¼Œå¹³å‡åœ°é—ªå¯†åº¦%.2fæ¬¡/kmÂ²ï¼Œå¹³å‡é›·æš´æ—¥%då¤©ï¼ˆè§è¡¨1-1ï¼‰ã€‚\
+ä¸ä¸Šå¹´çš„åœ°é—ª%dæ¬¡ç›¸æ¯”ï¼Œ%sã€‚ä»æ—¶é—´åˆ†å¸ƒæ¥çœ‹ï¼Œåœ°é—ªä¸»è¦é›†ä¸­åœ¨%dã€%dã€%dæœˆï¼Œ\
+ä¸‰ä¸ªæœˆåœ°é—ªå å…¨å¹´æ€»åœ°é—ªæ¬¡æ•°çš„%.2f%%ã€‚ä»ç©ºé—´åˆ†å¸ƒæ¥çœ‹ï¼Œ%så‘ç”Ÿåœ°é—ªæ¬¡æ•°æœ€å¤šï¼Œ%sæœ€å°‘ã€‚\
+å…¨å¸‚åœ°é—ªå¹³å‡å¯†åº¦%så…¨çœå¹³å‡çš„%.2fæ¬¡/kmÂ²ï¼Œåœ¨å…¨çœå„å¸‚ä¸­%sé—ªæ¬¡æ•°æ’ç¬¬%dä½ï¼Œ\
+åœ°é—ªå¹³å‡å¯†åº¦æ’ç¬¬%dä½ï¼ˆè§è¡¨1-2ï¼‰ã€‚\n'.% (year,sum_region,density_region,day_region,
                                 sum_region_lastyear, compare_with_lastyear, max_months[0],max_months[1],max_months[2],
                                 max_months_percent,sum_max_county,sum_min_county,compare_with_province,density_province,
                                 target_area,sum_rank_in_province,density_rank_in_province)
 
+
     rng  = doc.Paragraphs(24).Range
+    paragraphFormat = rng.ParagraphFormat
+    paragraphFont = rng.Font
     rng.Text = p24
-    rng.InsertParagraphAfter()
 
 
-    p25 = u'¾İ²»ÍêÈ«Í³¼Æ£¬2016ÄêÈ«ÊĞÒòÀ×µçÒı·¢µÄÔÖº¦¹²148Æğ£¬ÎŞÈËÔ±ÉËÍöÊÂ¹Ê¡£\
-Ôì³ÉÖ±½Ó¾­¼ÃËğÊ§´ï7788.04ÍòÔª£¬¼ä½Ó¾­¼ÃËğÊ§677.42ÍòÔª¡£'
+    p25 = u'æ®ä¸å®Œå…¨ç»Ÿè®¡ï¼Œ2016å¹´å…¨å¸‚å› é›·ç”µå¼•å‘çš„ç¾å®³å…±148èµ·ï¼Œæ— äººå‘˜ä¼¤äº¡äº‹æ•…ã€‚\
+é€ æˆç›´æ¥ç»æµæŸå¤±è¾¾7788.04ä¸‡å…ƒï¼Œé—´æ¥ç»æµæŸå¤±677.42ä¸‡å…ƒã€‚\n'
 
     rng  = doc.Paragraphs(25).Range
     rng.Text = p25
-    rng.InsertParagraphAfter()
+    rng.ParagraphFormat = paragraphFormat
 
-    p109= u'´ÓµØÇøÍ³¼ÆÀ´¿´£¬µØÇø·Ö²¼Ïà¶Ô²»¾ù£¬%sµØÉÁ´ÎÊı×î¶à£¬¹²%d´Î£¬%s×îÉÙ£¬Ö»ÓĞ%d´Î£¬\
-Á½Õß·Ö±ğÕ¼È«ÊĞ×ÜµØÉÁÊıµÄ%.2f%%ºÍ%.2f%%¡£´ÓÆ½¾ùÃÜ¶ÈÍ³¼ÆÀ´¿´£¬%sÃÜ¶È×î¸ß£¬Îª%.2f´Î/km?£¬\
-%s×îµÍ£¬Îª%.2f´Î/km2£¨¼û±í1-1£©¡£'%(sum_max_county,sum_max_region,sum_min_county,sum_min_region,
+    p109= u'ä»åœ°åŒºç»Ÿè®¡æ¥çœ‹ï¼Œåœ°åŒºåˆ†å¸ƒç›¸å¯¹ä¸å‡ï¼Œ%såœ°é—ªæ¬¡æ•°æœ€å¤šï¼Œå…±%dæ¬¡ï¼Œ%sæœ€å°‘ï¼Œåªæœ‰%dæ¬¡ï¼Œ\
+ä¸¤è€…åˆ†åˆ«å å…¨å¸‚æ€»åœ°é—ªæ•°çš„%.2f%%å’Œ%.2f%%ã€‚ä»å¹³å‡å¯†åº¦ç»Ÿè®¡æ¥çœ‹ï¼Œ%så¯†åº¦æœ€é«˜ï¼Œä¸º%.2fæ¬¡/kmÂ²ï¼Œ\
+%sæœ€ä½ï¼Œä¸º%.2fæ¬¡/kmÂ²ï¼ˆè§è¡¨1-1ï¼‰ã€‚\n'%(sum_max_county,sum_max_region,sum_min_county,sum_min_region,
                                             max_region_percent,min_region_percent,
                                             density_max_county,density_max_region,
                                             density_min_county,density_min_region)
 
     rng  = doc.Paragraphs(109).Range
     rng.Text = p109
-    rng.InsertParagraphAfter()
+    rng.ParagraphFormat = paragraphFormat
 
-    p110 = u'´ÓµØÉÁÃÜ¶È¿Õ¼ä·Ö²¼Í¼ÉÏ£¨¼ûÍ¼1-1£©¿ÉÒÔ¿´³ö£¬ÖîôßÎ÷±±²¿¡¢áÓÖİºÍÖîôß½»½çÇøÓòµØÉÁÃÜ¶È½Ï¸ß£¬\
-×î¸ß³¬¹ı5´Î/km2¡£ĞÂ²ı¶«²¿ÓĞ²¿·ÖµØÇø£¬µØÉÁÃÜ¶È³¬¹ı3´Î/km?£¬È«ÊĞ´ó²¿·ÖµØÇøµØÉÁÃÜ¶ÈĞ¡ÓÚ2´Î/km?¡£'
+    p110 = u'ä»åœ°é—ªå¯†åº¦ç©ºé—´åˆ†å¸ƒå›¾ä¸Šï¼ˆè§å›¾1-1ï¼‰å¯ä»¥çœ‹å‡ºï¼Œè¯¸æš¨è¥¿åŒ—éƒ¨ã€åµŠå·å’Œè¯¸æš¨äº¤ç•ŒåŒºåŸŸåœ°é—ªå¯†åº¦è¾ƒé«˜ï¼Œ\
+æœ€é«˜è¶…è¿‡5æ¬¡/kmÂ²ã€‚æ–°æ˜Œä¸œéƒ¨æœ‰éƒ¨åˆ†åœ°åŒºï¼Œåœ°é—ªå¯†åº¦è¶…è¿‡3æ¬¡/kmÂ²ï¼Œå…¨å¸‚å¤§éƒ¨åˆ†åœ°åŒºåœ°é—ªå¯†åº¦å°äº2æ¬¡/kmÂ²ã€‚\n'
 
     rng  = doc.Paragraphs(110).Range
     rng.Text = p110
-    rng.InsertParagraphAfter()
+    rng.ParagraphFormat = paragraphFormat
 
-    p113= u'ÏÖĞĞ¹ú¼Ò±ê×¼ËùÒıÓÃµÄÀ×±©ÈÕÖ¸ÈË¹¤¹Û²â£¨²âÕ¾ÖÜÎ§Ô¼15km°ë¾¶ÓòÃæ£©ÓĞÀ×±©ÌìÊıµÄ¶àÄêÆ½¾ù¡£\
-¸ù¾İÎÒÊ¡ÉÁµç¶¨Î»¼à²â×ÊÁÏÍÆËã£¨ÒÔ15kmÎª¼ä¸ô£¬·Ö±ğÍ³¼Æ¸÷µã15km°ë¾¶·¶Î§ÄÚµÄÀ×±©ÈÕ£¬ÔÙ²åÖµÍÆËã£©£¬\
-2016ÄêÈ«ÊĞµØÉÁÀ×±©ÈÕÆ½¾ù43Ìì£¬×îµÍÎª29Ìì£¬×î¸ß67Ìì¡£¿Õ¼ä·Ö²¼ÉÏÀ´¿´£¬±±²¿Æ½Ô­µØÇøÀ×±©ÈÕ½ÏÉÙ£¬\
-Î÷ÄÏ´ó²¿ºÍ¶«ÄÏ²¿·ÖÇøÓòÀ×±©ÌìÊı½Ï¶à£¨¼ûÍ¼1-2£©¡£'
+    p113= u'ç°è¡Œå›½å®¶æ ‡å‡†æ‰€å¼•ç”¨çš„é›·æš´æ—¥æŒ‡äººå·¥è§‚æµ‹ï¼ˆæµ‹ç«™å‘¨å›´çº¦15kmåŠå¾„åŸŸé¢ï¼‰æœ‰é›·æš´å¤©æ•°çš„å¤šå¹´å¹³å‡ã€‚\
+æ ¹æ®æˆ‘çœé—ªç”µå®šä½ç›‘æµ‹èµ„æ–™æ¨ç®—ï¼ˆä»¥15kmä¸ºé—´éš”ï¼Œåˆ†åˆ«ç»Ÿè®¡å„ç‚¹15kmåŠå¾„èŒƒå›´å†…çš„é›·æš´æ—¥ï¼Œå†æ’å€¼æ¨ç®—ï¼‰ï¼Œ\
+2016å¹´å…¨å¸‚åœ°é—ªé›·æš´æ—¥å¹³å‡43å¤©ï¼Œæœ€ä½ä¸º29å¤©ï¼Œæœ€é«˜67å¤©ã€‚ç©ºé—´åˆ†å¸ƒä¸Šæ¥çœ‹ï¼ŒåŒ—éƒ¨å¹³åŸåœ°åŒºé›·æš´æ—¥è¾ƒå°‘ï¼Œ\
+è¥¿å—å¤§éƒ¨å’Œä¸œå—éƒ¨åˆ†åŒºåŸŸé›·æš´å¤©æ•°è¾ƒå¤šï¼ˆè§å›¾1-2ï¼‰ã€‚\n'
 
     rng  = doc.Paragraphs(113).Range
     rng.Text = p113
-    rng.InsertParagraphAfter()
+    rng.ParagraphFormat = paragraphFormat
 
     if len(months_zero) ==0:
         months_zero_description = u''
     elif len(months_zero) ==1:
-        months_zero_description = u'%dÔÂÎ´¼à²âµ½µØÉÁ£¬'%months_zero[0]
+        months_zero_description = u'%dæœˆæœªç›‘æµ‹åˆ°åœ°é—ªï¼Œ'%months_zero[0]
     elif len(months_zero) ==2:
-        months_zero_description = u'%dÔÂºÍ%dÔÂÎ´¼à²âµ½µØÉÁ£¬'%(months_zero[0],months_zero[1])
+        months_zero_description = u'%dæœˆå’Œ%dæœˆæœªç›‘æµ‹åˆ°åœ°é—ªï¼Œ'%(months_zero[0],months_zero[1])
     else:
-        s =  u'ÔÂ¡¢'.join(map(lambda d:str(d),months_zero[:len(months_zero)-1]))
-        months_zero_description = u''.join([s,u'ÔÂºÍ%dÔÂ¶¼Î´¼à²âµ½µØÉÁ£¬'%months_zero[-1]])
-    p115 =u'%dÄê%sÀ×µç³õÈÕÎª%dÔÂ%dÈÕ¡£´Ó·ÖÔÂÍ³¼ÆÀ´¿´£¬µØÉÁ´ÎÊıËæÔÂ·İ³ÊÏÖ½üËÆÕıÌ¬·Ö²¼ÌØÕ÷£¬%s\
-µØÉÁ´ÎÊı·åÖµ³öÏÖÔÚ%dÔÂ£¬%d¡¢%d¡¢%dÔÂÊÇÀ×±©¸ß·¢µÄÔÂ·İ£¬Èı¸öÔÂµØÉÁ´ÎÊıÕ¼×ÜÊıµÄ%.2f%%¡£\
-Õı¡¢¸ºµØÉÁÆ½¾ùÇ¿¶ÈµÄ·åÖµ·Ö±ğÔÚ%dÔÂºÍ%dÔÂ£¬ÆäËûÔÂ·İ²¨¶¯Æ½»º(¼ûÍ¼1-3) ¡£'%(year,target_area,
+        s =  u'æœˆã€'.join(map(lambda d:str(d),months_zero[:len(months_zero)-1]))
+        months_zero_description = u''.join([s,u'æœˆå’Œ%dæœˆéƒ½æœªç›‘æµ‹åˆ°åœ°é—ªï¼Œ'%months_zero[-1]])
+    p115 =u'%då¹´%sé›·ç”µåˆæ—¥ä¸º%dæœˆ%dæ—¥ã€‚ä»åˆ†æœˆç»Ÿè®¡æ¥çœ‹ï¼Œåœ°é—ªæ¬¡æ•°éšæœˆä»½å‘ˆç°è¿‘ä¼¼æ­£æ€åˆ†å¸ƒç‰¹å¾ï¼Œ%s\
+åœ°é—ªæ¬¡æ•°å³°å€¼å‡ºç°åœ¨%dæœˆï¼Œ%dã€%dã€%dæœˆæ˜¯é›·æš´é«˜å‘çš„æœˆä»½ï¼Œä¸‰ä¸ªæœˆåœ°é—ªæ¬¡æ•°å æ€»æ•°çš„%.2f%%ã€‚\
+æ­£ã€è´Ÿåœ°é—ªå¹³å‡å¼ºåº¦çš„å³°å€¼åˆ†åˆ«åœ¨%dæœˆå’Œ%dæœˆï¼Œå…¶ä»–æœˆä»½æ³¢åŠ¨å¹³ç¼“(è§å›¾1-3) ã€‚\n'%(year,target_area,
                         first_date.month,first_date.day,months_zero_description,
                         max_month_region,max_months[0],max_months[1],max_months[2],max_months_percent,
                         peak_month_positive_intensity,peak_month_negative_intensity)
 
     rng  = doc.Paragraphs(115).Range
     rng.Text = p115
-    rng.InsertParagraphAfter()
+    rng.ParagraphFormat = paragraphFormat
 
-    p118 = u'´Ó·ÖÊ±¶ÎÍ³¼ÆÀ´¿´£¬µØÉÁ´ÎÊı·åÖµ³öÏÖÔÚµÚ18¸öÊ±¶Î£¨17:00-18:00£©£¬µØÉÁÖ÷Òª¼¯ÖĞÔÚÎçºóÁ½µãµ½ÍíÉÏ¾Åµã£¬\
-Æß¸öÊ±¶ÎÄÚµÄµØÉÁ´ÎÊıÕ¼×ÜÊıµÄd%¡£µØÉÁÆ½¾ùÇ¿¶ÈËæÊ±¼ä³Ê²¨×´Æğ·üÌØÕ÷£¬µ«×ÜÌå²¨¶¯²»´ó¡£\
-ÕıÉÁÆ½¾ùÇ¿¶È·åÖµÔÚµÚ7¸öÊ±¶Î£¨7:00-8:00£©£¬¸ºÉÁÆ½¾ùÇ¿¶È·åÖµÔÚµÚ11¸öÊ±¶Î£¨11:00-12:00£©(¼ûÍ¼1-4)¡£'
+    p118 = u'ä»åˆ†æ—¶æ®µç»Ÿè®¡æ¥çœ‹ï¼Œåœ°é—ªæ¬¡æ•°å³°å€¼å‡ºç°åœ¨ç¬¬18ä¸ªæ—¶æ®µï¼ˆ17:00-18:00ï¼‰ï¼Œåœ°é—ªä¸»è¦é›†ä¸­åœ¨åˆåä¸¤ç‚¹åˆ°æ™šä¸Šä¹ç‚¹ï¼Œ\
+ä¸ƒä¸ªæ—¶æ®µå†…çš„åœ°é—ªæ¬¡æ•°å æ€»æ•°çš„d%ã€‚åœ°é—ªå¹³å‡å¼ºåº¦éšæ—¶é—´å‘ˆæ³¢çŠ¶èµ·ä¼ç‰¹å¾ï¼Œä½†æ€»ä½“æ³¢åŠ¨ä¸å¤§ã€‚\
+æ­£é—ªå¹³å‡å¼ºåº¦å³°å€¼åœ¨ç¬¬7ä¸ªæ—¶æ®µï¼ˆ7:00-8:00ï¼‰ï¼Œè´Ÿé—ªå¹³å‡å¼ºåº¦å³°å€¼åœ¨ç¬¬11ä¸ªæ—¶æ®µï¼ˆ11:00-12:00ï¼‰(è§å›¾1-4)ã€‚\n'
 
     rng  = doc.Paragraphs(118).Range
     rng.Text = p118
-    rng.InsertParagraphAfter()
+    rng.ParagraphFormat = paragraphFormat
+    rng.Font = paragraphFont
 
-    p122 = u'ÓÉÕı¡¢¸ºµØÉÁÇ¿¶È·Ö²¼Í¼¿É¼û£¬µØÉÁ´ÎÊıËæµØÉÁÇ¿¶È³Ê½üËÆÕıÌ¬·Ö²¼ÌØÕ÷¡£ÕıµØÉÁÖ÷Òª¼¯ÖĞÔÚ5-60kAÄÚ£¨¼ûÍ¼1-5£©£¬\
-¸ÃÇø¼äÄÚÕıµØÉÁ´ÎÊıÔ¼Õ¼×ÜµØÉÁµÄ87.20%£¬¸ºµØÉÁÖ÷Òª·Ö²¼ÔÚ5-60kAÄÚ£¨¼ûÍ¼1-6£©£¬\
-¸ÃÇø¼äÄÚ¸ºµØÉÁ´ÎÊıÔ¼Õ¼×Ü¸ºµØÉÁµÄ91.46%¡£'
+    p122 = u'ç”±æ­£ã€è´Ÿåœ°é—ªå¼ºåº¦åˆ†å¸ƒå›¾å¯è§ï¼Œåœ°é—ªæ¬¡æ•°éšåœ°é—ªå¼ºåº¦å‘ˆè¿‘ä¼¼æ­£æ€åˆ†å¸ƒç‰¹å¾ã€‚æ­£åœ°é—ªä¸»è¦é›†ä¸­åœ¨5-60kAå†…ï¼ˆè§å›¾1-5ï¼‰ï¼Œ\
+è¯¥åŒºé—´å†…æ­£åœ°é—ªæ¬¡æ•°çº¦å æ€»åœ°é—ªçš„87.20%ï¼Œè´Ÿåœ°é—ªä¸»è¦åˆ†å¸ƒåœ¨5-60kAå†…ï¼ˆè§å›¾1-6ï¼‰ï¼Œ\
+è¯¥åŒºé—´å†…è´Ÿåœ°é—ªæ¬¡æ•°çº¦å æ€»è´Ÿåœ°é—ªçš„91.46%ã€‚\n'
     rng  = doc.Paragraphs(122).Range
     rng.Text = p122
-    rng.InsertParagraphAfter()
+    rng.ParagraphFormat = paragraphFormat
 
 finally:
-    workbook.Save()  # ±£´æEXCEL¹¤×÷±¡
-    workbook.Close()  # ¹Ø±Õ¹¤×÷±¡ÎÄ¼ş
-    excel.Quit()  # ¹Ø±ÕEXCELÓ¦ÓÃ³ÌĞò
+    workbook.Save()  # ä¿å­˜EXCELå·¥ä½œè–„
+    workbook.Close()  # å…³é—­å·¥ä½œè–„æ–‡ä»¶
+    excel.Quit()  # å…³é—­EXCELåº”ç”¨ç¨‹åº
     doc.Save()
     doc.Close()
     word.Quit()
-    db.close()  # ¹Ø±ÕÊı¾İÁ¬½Ó
+    db.close()  # å…³é—­æ•°æ®è¿æ¥
