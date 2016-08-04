@@ -1,4 +1,4 @@
-# -*- coding: gb2312 -*-
+# -*- coding: utf-8 -*-
 # import arcpy
 # from arcpy.sa import *
 #
@@ -68,6 +68,7 @@ try:
     GROUP BY Region
     ORDER BY count(*) DESC
     """ % data_table
+    sql = sql.decode('utf-8').encode('gbk')
 
     #处理SQL查询结果，顺便记录本地区地闪次数在全省的排名
     results = {}
@@ -111,6 +112,7 @@ try:
     GROUP BY County
     ORDER BY count(*) DESC
     """ % data_table
+    sql = sql.decode('utf-8').encode('gbk')
     #处理SQL查询结果，顺便记录地闪次数的最大和最小值
     results = {}
     rank = 0
@@ -185,6 +187,7 @@ try:
     WHERE Region='绍兴市' AND Intensity<0 AND Date_>=#YEAR/12/1# AND Date_<=#YEAR/12/31#
     ORDER BY 月份
     """.replace('QUERY_TABLE', data_table).replace('YEAR', str(year))
+    sql = sql.decode('utf-8').encode('gbk')
 
     sheet = workbook.Worksheets(u'分月统计')
     i = 1  # 行号
@@ -241,6 +244,8 @@ try:
     WHERE Region='绍兴市' AND Intensity>=0 AND Date_>=#YEAR/12/1# AND Date_<=#YEAR/12/31#
     ORDER BY 月份
     """.replace('QUERY_TABLE', data_table).replace('YEAR', str(year))
+    sql = sql.decode('utf-8').encode('gbk')
+
     i = 1  # 行号
     month = 0
     positive_intensity_dict = {}#记录正闪强度
@@ -267,15 +272,362 @@ try:
     months_zero = [i[0] for i in sum_month_sorted if i[1]== 0]
     months_zero.sort()
 
+    #****查询雷暴初日********
     sql = """SELECT TOP 1 Date_
     From %s
     Where Region = '%s'
     Order By Date_, OBJECTID
-    """%(data_table,target_area.encode('gb2312'))
+    """%(data_table,target_area.encode('utf-8'))
+    sql = sql.decode('utf-8').encode('gbk')
+
     for row in cursor.execute(sql):
         first_date = row[0]
 
 
+    # ************分时段统计 时段地闪次数和时段平均强度(负闪)**************
+    sql = """
+    SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,0 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=0
+    UNION SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,1 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=1
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,2 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=2
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,3 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=3
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,4 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=4
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,5 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=5
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,6 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=6
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,7 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=7
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,8 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=8
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,9 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=9
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,10 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=10
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,11 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=11
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,12 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=12
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,13 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=13
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,14 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=14
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,15 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=15
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,16 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=16
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,17 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=17
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,18 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=18
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,19 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=19
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,20 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=20
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,21 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=21
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,22 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=22
+    union SELECT count(*) AS 负闪次数, -sum(Intensity)/count(*) AS 平均强度 ,23 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Val(Time_)=23
+    ORDER BY 时段
+    """.replace('QUERY_TABLE', data_table)
+    sql = sql.decode('utf-8').encode('gbk')
+
+    sheet = workbook.Worksheets(u'分时段统计')
+    i = 1  # 行号
+    for row in cursor.execute(sql):
+        i += 1
+        sheet.Cells(i, 2).Value = row[0]  # 负闪次数
+        sheet.Cells(i, 5).Value = row[1] if row[1] is not None else 0  # 负闪强度
+
+    # ************分时段统计 时段地闪次数和时段平均强度(正闪)**************
+    sql = """
+    SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,0 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=0
+    UNION SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,1 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=1
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,2 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=2
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,3 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=3
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,4 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=4
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,5 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=5
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,6 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=6
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,7 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=7
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,8 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=8
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,9 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=9
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,10 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=10
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,11 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=11
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,12 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=12
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,13 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=13
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,14 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=14
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,15 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=15
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,16 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=16
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,17 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=17
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,18 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=18
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,19 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=19
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,20 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=20
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,21 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=21
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,22 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=22
+    union SELECT count(*) AS 正闪次数, sum(Intensity)/count(*) AS 平均强度 ,23 AS 时段
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Val(Time_)=23
+    ORDER BY 时段
+    """.replace('QUERY_TABLE', data_table)
+    sql = sql.decode('utf-8').encode('gbk')
+
+    i = 1  # 行号
+    for row in cursor.execute(sql):
+        i += 1
+        sheet.Cells(i, 3).Value = row[0]  # 正闪次数
+        sheet.Cells(i, 6).Value = row[1] if row[1] is not None else 0  # 正闪强度
+
+    # **********负闪强度分布**************
+    sql = """
+    SELECT count(*) AS 负闪次数,0 AS 左边界,5 AS 右边界
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=0 AND Abs(Intensity)<5
+    union SELECT count(*) AS 负闪次数,5,10
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=5 AND Abs(Intensity)<10
+    union SELECT count(*) AS 负闪次数,10,15
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=10 AND Abs(Intensity)<15
+    union SELECT count(*) AS 负闪次数,15,20
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=15 AND Abs(Intensity)<20
+    union SELECT count(*) AS 负闪次数,20,25
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=20 AND Abs(Intensity)<25
+    union SELECT count(*) AS 负闪次数,25,30
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=25 AND Abs(Intensity)<30
+    union SELECT count(*) AS 负闪次数,30,35
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=30 AND Abs(Intensity)<35
+    union SELECT count(*) AS 负闪次数,35,40
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=35 AND Abs(Intensity)<40
+    union SELECT count(*) AS 负闪次数,40,45
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=40 AND Abs(Intensity)<45
+    union SELECT count(*) AS 负闪次数,45,50
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=45 AND Abs(Intensity)<50
+    union SELECT count(*) AS 负闪次数,50,55
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=50 AND Abs(Intensity)<55
+    union SELECT count(*) AS 负闪次数,55,60
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=55 AND Abs(Intensity)<60
+    union SELECT count(*) AS 负闪次数,60,65
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=60 AND Abs(Intensity)<65
+    union SELECT count(*) AS 负闪次数,65,70
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=65 AND Abs(Intensity)<70
+    union SELECT count(*) AS 负闪次数,70,75
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=70 AND Abs(Intensity)<75
+    union SELECT count(*) AS 负闪次数,75,80
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=75 AND Abs(Intensity)<80
+    union SELECT count(*) AS 负闪次数,80,85
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=80 AND Abs(Intensity)<85
+    union SELECT count(*) AS 负闪次数,85,90
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=85 AND Abs(Intensity)<90
+    union SELECT count(*) AS 负闪次数,90,95
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=90 AND Abs(Intensity)<95
+    union SELECT count(*) AS 负闪次数,95,100
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=95 AND Abs(Intensity)<100
+    union SELECT count(*) AS 负闪次数,100,150
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=100 AND Abs(Intensity)<150
+    union SELECT count(*) AS 负闪次数,150,200
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=150 AND Abs(Intensity)<200
+    union SELECT count(*) AS 负闪次数,200,250
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=200 AND Abs(Intensity)<250
+    union SELECT count(*) AS 负闪次数,250,300
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=250 AND Abs(Intensity)<300
+    UNION SELECT count(*) AS 负闪次数,300,1000
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity<0 AND Abs(Intensity)>=300
+    ORDER BY 左边界
+    """.replace("QUERY_TABLE", data_table)
+    sql = sql.decode('utf-8').encode('gbk')
+
+    sheet = workbook.Worksheets(u'强度分布统计')
+    i = 1  # 行号
+    for row in cursor.execute(sql):
+        i += 1
+        sheet.Cells(i, 3).Value = row[0]  # 负闪次数
+
+    # ***********正闪强度分布************
+    sql = """
+    SELECT count(*) AS 正闪次数,0 AS 左边界,5 AS 右边界
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=0 AND Intensity<5
+    union SELECT count(*) AS 正闪次数,5,10
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=5 AND Intensity<10
+    union SELECT count(*) AS 正闪次数,10,15
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=10 AND Intensity<15
+    union SELECT count(*) AS 正闪次数,15,20
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=15 AND Intensity<20
+    union SELECT count(*) AS 正闪次数,20,25
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=20 AND Intensity<25
+    union SELECT count(*) AS 正闪次数,25,30
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=25 AND Intensity<30
+    union SELECT count(*) AS 正闪次数,30,35
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=30 AND Intensity<35
+    union SELECT count(*) AS 正闪次数,35,40
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=35 AND Intensity<40
+    union SELECT count(*) AS 正闪次数,40,45
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=40 AND Intensity<45
+    union SELECT count(*) AS 正闪次数,45,50
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=45 AND Intensity<50
+    union SELECT count(*) AS 正闪次数,50,55
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=50 AND Intensity<55
+    union SELECT count(*) AS 正闪次数,55,60
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=55 AND Intensity<60
+    union SELECT count(*) AS 正闪次数,60,65
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=60 AND Intensity<65
+    union SELECT count(*) AS 正闪次数,65,70
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=65 AND Intensity<70
+    union SELECT count(*) AS 正闪次数,70,75
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=70 AND Intensity<75
+    union SELECT count(*) AS 正闪次数,75,80
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=75 AND Intensity<80
+    union SELECT count(*) AS 正闪次数,80,85
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=80 AND Intensity<85
+    union SELECT count(*) AS 正闪次数,85,90
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=85 AND Intensity<90
+    union SELECT count(*) AS 正闪次数,90,95
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=90 AND Intensity<95
+    union SELECT count(*) AS 正闪次数,95,100
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=95 AND Intensity<100
+    union SELECT count(*) AS 正闪次数,100,150
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=100 AND Intensity<150
+    union SELECT count(*) AS 正闪次数,150,200
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=150 AND Intensity<200
+    union SELECT count(*) AS 正闪次数,200,250
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=200 AND Intensity<250
+    union SELECT count(*) AS 正闪次数,250,300
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=250 AND Intensity<300
+    UNION SELECT count(*) AS 正闪次数,300,1000
+    FROM QUERY_TABLE
+    WHERE Region='绍兴市' AND Intensity>=300
+    ORDER BY 左边界
+    """.replace("QUERY_TABLE", data_table)
+    sql = sql.decode('utf-8').encode('gbk')
+
+    i = 1  # 行号
+    for row in cursor.execute(sql):
+        i += 1
+        sheet.Cells(i, 4).Value = row[0]  # 正闪次数
+
+
+    #**********分段落处理***********
     #todo sum_region_lastyear
     sum_region_lastyear = 22122
     day_region = 40
@@ -307,7 +659,7 @@ try:
 与上年的地闪%d次相比，%s。从时间分布来看，地闪主要集中在%d、%d、%d月，\
 三个月地闪占全年总地闪次数的%.2f%%。从空间分布来看，%s发生地闪次数最多，%s最少。\
 全市地闪平均密度%s全省平均的%.2f次/km²，在全省各市中%s闪次数排第%d位，\
-地闪平均密度排第%d位（见表1-2）。\n'.% (year,sum_region,density_region,day_region,
+地闪平均密度排第%d位（见表1-2）。\n'% (year,sum_region,density_region,day_region,
                                 sum_region_lastyear, compare_with_lastyear, max_months[0],max_months[1],max_months[2],
                                 max_months_percent,sum_max_county,sum_min_county,compare_with_province,density_province,
                                 target_area,sum_rank_in_province,density_rank_in_province)
@@ -388,6 +740,7 @@ try:
     rng  = doc.Paragraphs(122).Range
     rng.Text = p122
     rng.ParagraphFormat = paragraphFormat
+
 
 finally:
     workbook.Save()  # 保存EXCEL工作薄
