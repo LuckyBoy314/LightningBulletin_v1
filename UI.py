@@ -20,6 +20,8 @@ import time,os
 from multiprocessing import Process
 from shutil import move,copy
 
+
+cwd = os.getcwd()
 class WorkThread(QObject):
     trigger = pyqtSignal()
 
@@ -62,8 +64,7 @@ class MainWindow(QMainWindow):
         sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(sizePolicy)
         icon = QIcon()
-        icon.addPixmap(QPixmap("D:/Program Files (x86)/LightningBulletin/weather-thunder.png"),
-                       QIcon.Normal, QIcon.Off)
+        icon.addPixmap(QPixmap('./resource/weather-thunder.png'),QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
         self.centralwidget = QWidget(self)
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -276,7 +277,7 @@ class MainWindow(QMainWindow):
             msgBox.setText(message)
             msgBox.setIcon(QMessageBox.Information)
             icon = QIcon()
-            icon.addPixmap(QPixmap("weather-thunder.png"), QIcon.Normal, QIcon.Off)
+            icon.addPixmap(QPixmap('./resource/weather-thunder.png'), QIcon.Normal, QIcon.Off)
             msgBox.setWindowIcon(icon)
             msgBox.setWindowTitle(" ")
             msgBox.exec_()
@@ -323,9 +324,9 @@ class MainWindow(QMainWindow):
         self.density_view.resize(size)
         self.verticalLayout_2.addWidget(self.density_view)
 
-        densityPic = u'D:/bulletinTemp/'+\
-            self.in_parameters[u'datetime']+u'/'+ self.in_parameters[u'datetime']+\
-            self.in_parameters[u'target_area']+u'闪电密度空间分布.tif'
+        densityPic = ''.join([cwd,u'/bulletinTemp/',
+            self.in_parameters[u'datetime'],u'/',self.in_parameters[u'datetime'],
+            self.in_parameters[u'target_area'],u'闪电密度空间分布.tif'])
 
         scene = QGraphicsScene()
         pixmap_density = QPixmap(densityPic)
@@ -345,9 +346,9 @@ class MainWindow(QMainWindow):
         self.day_view.resize(size)
         self.verticalLayout.addWidget(self.day_view)
 
-        dayPic = u'D:/bulletinTemp/'+\
-            self.in_parameters[u'datetime']+u'/'+ self.in_parameters[u'datetime']+\
-            self.in_parameters[u'target_area']+u'地闪雷暴日空间分布.tif'
+        dayPic = ''.join([cwd,u'/bulletinTemp/',
+            self.in_parameters[u'datetime'],u'/',self.in_parameters[u'datetime'],
+            self.in_parameters[u'target_area'],u'地闪雷暴日空间分布.tif'])
 
         pixmap_day = QPixmap(dayPic)
         scene = QGraphicsScene()
@@ -384,12 +385,12 @@ class MainWindow(QMainWindow):
         self.in_parameters[u'origin_data_path'] = fnames[0]
 
     def savePic(self):
-        densityPic = u'D:/bulletinTemp/'+\
-            self.in_parameters[u'datetime']+u'/'+ self.in_parameters[u'datetime']+\
-            self.in_parameters[u'target_area']+u'闪电密度空间分布.tif'
-        dayPic = u'D:/bulletinTemp/'+\
-            self.in_parameters[u'datetime']+u'/'+ self.in_parameters[u'datetime']+\
-            self.in_parameters[u'target_area']+u'地闪雷暴日空间分布.tif'
+        densityPic = ''.join([cwd,u'/bulletinTemp/',
+            self.in_parameters[u'datetime'],u'/', self.in_parameters[u'datetime'],
+            self.in_parameters[u'target_area'],u'闪电密度空间分布.tif'])
+        dayPic = ''.join([cwd,u'D:/bulletinTemp/',
+            self.in_parameters[u'datetime'],u'/', self.in_parameters[u'datetime'],
+            self.in_parameters[u'target_area'],u'地闪雷暴日空间分布.tif'])
 
         directory = QFileDialog.getExistingDirectory(self,u'请选择图片保存位置',
                                                      u'E:/Documents/工作/雷电公报',
@@ -404,7 +405,7 @@ class MainWindow(QMainWindow):
             msgBox.setText(message)
             msgBox.setIcon(QMessageBox.Information)
             icon = QIcon()
-            icon.addPixmap(QPixmap("weather-thunder.png"), QIcon.Normal, QIcon.Off)
+            icon.addPixmap(QPixmap("./resource/weather-thunder.png"), QIcon.Normal, QIcon.Off)
             msgBox.setWindowIcon(icon)
             msgBox.setWindowTitle(" ")
             msgBox.exec_()
@@ -415,9 +416,9 @@ class MainWindow(QMainWindow):
 
     def openMxdDay(self):
         program  = u'C:/Program Files (x86)/ArcGIS/Desktop10.3/bin/ArcMap.exe'
-        src_dir = u'D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb'
-        dest_dir = u"D:/bulletinTemp/" + self.in_parameters[u'datetime'] + u"/" + self.in_parameters[u'target_area']
-        src_file = self.in_parameters[u'target_area'] + u"地闪雷暴日空间分布模板.mxd"
+        src_dir = ''.join([cwd,u'/data/LightningBulletin.gdb'])
+        dest_dir = ''.join([cwd,u"/bulletinTemp/",self.in_parameters[u'datetime'], u"/" , self.in_parameters[u'target_area']])
+        src_file = ''.join([self.in_parameters[u'target_area'] , u"地闪雷暴日空间分布模板.mxd"])
 
         copy(os.path.join(src_dir,src_file),dest_dir)
 
@@ -427,9 +428,10 @@ class MainWindow(QMainWindow):
 
     def openMxdDensity(self):
         program  = u'C:/Program Files (x86)/ArcGIS/Desktop10.3/bin/ArcMap.exe'
-        src_dir = u'D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb'
-        dest_dir = u"D:/bulletinTemp/" + self.in_parameters[u'datetime'] + u"/" + self.in_parameters[u'target_area']
-        src_file = self.in_parameters[u'target_area'] + u"闪电密度空间分布模板.mxd"
+        src_dir = ''.join([cwd,u'/data/LightningBulletin.gdb'])
+        dest_dir = ''.join([cwd,u"/bulletinTemp/",self.in_parameters[u'datetime'], u"/" , self.in_parameters[u'target_area']])
+        src_file = ''.join([self.in_parameters[u'target_area'] ,u"闪电密度空间分布模板.mxd"])
+
 
         copy(os.path.join(src_dir,src_file),dest_dir)
 
@@ -442,7 +444,7 @@ class MainWindow(QMainWindow):
 
     def showHelp(self):
         program  = u'C:/Windows/hh.exe'
-        arguments = ['D:/Program Files (x86)/LightningBulletin/Help/help.CHM']
+        arguments = [''.join([cwd,'/help/help.CHM'])]
         self.process = QProcess(self)
         self.process.start(program,arguments)
 
@@ -510,7 +512,7 @@ class About_Dialog(QDialog):
         self.setObjectName("Dialog")
         self.setFixedSize(464, 257)
         icon = QIcon()
-        icon.addPixmap(QPixmap("weather-thunder.png"), QIcon.Normal, QIcon.Off)
+        icon.addPixmap(QPixmap("./resource/weather-thunder.png"), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
         self.setSizeGripEnabled(False)
         self.setModal(True)
@@ -520,7 +522,7 @@ class About_Dialog(QDialog):
         self.label = QLabel(self)
         self.label.setGeometry(QRect(0, 0, 641, 131))
         self.label.setText("")
-        self.label.setPixmap(QPixmap("about.jpg"))
+        self.label.setPixmap(QPixmap("./resource/about.jpg"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
 

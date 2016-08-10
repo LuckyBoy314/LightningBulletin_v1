@@ -43,7 +43,7 @@ region_area = {u'越城区':498.0,u'柯桥区':1041.0,u'上虞区':1403.0,u'诸�
 cwd = os.getcwd()  # 获取当前工作目录，便于程序移植
 # 链接数据库
 db = pyodbc.connect(''.join(['DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};',
-                             'DBQ=', cwd, '/Data/GDB.mdb;']))  # Uid=Admin;Pwd=;')
+                             'DBQ=', cwd, '/data/GDB.mdb;']))  # Uid=Admin;Pwd=;')
 cursor = db.cursor()
 
 data_table = ''.join(['data', str(year), '年'])  # sql查询语句不用使用Unicode

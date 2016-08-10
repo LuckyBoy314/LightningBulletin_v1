@@ -4,8 +4,9 @@ import arcpy.mapping as mapping
 from arcpy.sa import *
 import arcpy
 import os
+import time
 
-
+cwd = os.getcwd()
 # 默认分成十类
 def dayLegendLabel(start, end, intervals=10):
     L = []
@@ -77,31 +78,31 @@ def densityLegendLabel(min, max, intervals=None):
 def mappingProcess(target_area, datetime, density_class=None, day_class=10, out_path=None, out_type="TIFF"):
     # todo.控制densityClass和dayClass最多为14
 
-    infeature = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/" + target_area
-    mxd_density_path = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/" + target_area + u"闪电密度空间分布模板.mxd"
-    mxd_day_path = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/" + target_area + u"地闪雷暴日空间分布模板.mxd"
+    infeature = ''.join([cwd,u"/data/LightningBulletin.gdb/" , target_area])
+    mxd_density_path = ''.join([cwd,u"/data/LightningBulletin.gdb/" ,target_area ,u"闪电密度空间分布模板.mxd"])
+    mxd_day_path = ''.join([cwd,u"/data/LightningBulletin.gdb/" , target_area , u"地闪雷暴日空间分布模板.mxd"])
     workspace = arcpy.env.workspace
 
     # *****处理地闪密度地图文档*******
     mxd = mapping.MapDocument(mxd_density_path)
     mask_lyr = mapping.ListLayers(mxd)[2]
     target_lyr = mapping.ListLayers(mxd)[3]
-    mask_lyr.replaceDataSource(workspace, "SHAPEFILE_WORKSPACE", "densityMask")
-    target_lyr.replaceDataSource(workspace, "RASTER_WORKSPACE", "lightningDensity")
+    mask_lyr.replaceDataSource(workspace, "FILEGDB_WORKSPACE", "densityMask")
+    target_lyr.replaceDataSource(workspace, "FILEGDB_WORKSPACE", "lightningDensity")
     # 修改图例
     # 计算数据分割值和不显示值
-    extract = ExtractByMask("lightningDensity.tif", infeature)
-    raster = Raster("lightningDensity.tif")
+    extract = ExtractByMask("lightningDensity", infeature)
+    raster = Raster("lightningDensity")
 
     class_break_values,density_class = densityLegendLabel(extract.minimum / 100, extract.maximum / 100, density_class)
-    excluded_values = str(round(raster.minimum - 0.5, 2)) + "-" + str(round(extract.minimum - 0.5, 2)) + ";" + \
-                     str(round(extract.maximum + 0.5, 2)) + "-" + str(round(raster.maximum + 0.5, 2))
+    excluded_values =''.join([str(round(raster.minimum - 0.5, 2)) ,"-" ,str(round(extract.minimum - 0.5, 2)) , ";" ,
+                     str(round(extract.maximum + 0.5, 2)) ,"-" ,str(round(raster.maximum + 0.5, 2))])
     sym = target_lyr.symbology
     sym.excludedValues = excluded_values
     sym.classBreakValues = [x * 100 for x in class_break_values]
     # 更改标题和图例
     layout_items = mapping.ListLayoutElements(mxd, "TEXT_ELEMENT")
-    layout_items[-1].text = datetime + target_area + u"闪电密度空间分布"
+    layout_items[-1].text = ''.join([datetime ,target_area ,u"闪电密度空间分布"])
 
     density_class = class_break_values.__len__() - 1
     class_break_values = [str(x) for x in class_break_values]
@@ -120,7 +121,7 @@ def mappingProcess(target_area, datetime, density_class=None, day_class=10, out_
     mxd.save()
     if not out_path:
         out_path = arcpy.env.workspace
-    out_name = os.path.join(out_path, datetime + target_area + u"闪电密度空间分布")
+    out_name = os.path.join(out_path, ''.join([datetime , target_area ,u"闪电密度空间分布"]))
 
     out_type = out_type.lower()
     if out_type in ["jpg", 'gpeg']:
@@ -138,23 +139,23 @@ def mappingProcess(target_area, datetime, density_class=None, day_class=10, out_
     mxd = mapping.MapDocument(mxd_day_path)
     mask_lyr = mapping.ListLayers(mxd)[2]
     target_lyr = mapping.ListLayers(mxd)[3]
-    mask_lyr.replaceDataSource(workspace, "SHAPEFILE_WORKSPACE", "dayMask")
-    target_lyr.replaceDataSource(workspace, "RASTER_WORKSPACE", "lightningDay")
+    mask_lyr.replaceDataSource(workspace, "FILEGDB_WORKSPACE", "dayMask")
+    target_lyr.replaceDataSource(workspace, "FILEGDB_WORKSPACE", "lightningDay")
     # 修改图例
     # 计算数据分割值和不显示值
-    extract = ExtractByMask("lightningDay.tif", infeature)
-    raster = Raster("lightningDay.tif")
+    extract = ExtractByMask("lightningDay", infeature)
+    raster = Raster("lightningDay")
     start = floor(extract.minimum)
     end = ceil(extract.maximum)
     class_break_values,day_class = dayLegendLabel(start, end, day_class)
-    excluded_values = str(round(raster.minimum - 0.5, 2)) + "-" + str(round(extract.minimum - 0.5, 2)) + ";" + \
-                     str(round(extract.maximum + 0.5, 2)) + "-" + str(round(raster.maximum + 0.5, 2))
+    excluded_values = ''.join([str(round(raster.minimum - 0.5, 2)) , "-" , str(round(extract.minimum - 0.5, 2)), ";" ,
+                     str(round(extract.maximum + 0.5, 2)) , "-" , str(round(raster.maximum + 0.5, 2))])
     sym = target_lyr.symbology
     sym.excludedValues = excluded_values
     sym.classBreakValues = class_break_values
     # 更改标题和图例
     layout_items = mapping.ListLayoutElements(mxd, "TEXT_ELEMENT")
-    layout_items[-1].text = datetime + target_area + u"地闪雷暴日空间分布"
+    layout_items[-1].text = ''.join([datetime , target_area , u"地闪雷暴日空间分布"])
 
     Y, Xstart,gap = position[target_area]
     for i in xrange(day_class + 1):
@@ -165,7 +166,7 @@ def mappingProcess(target_area, datetime, density_class=None, day_class=10, out_
         layout_items[i].elementPositionX = -20
 
     mxd.save()
-    out_name = os.path.join(out_path, datetime + target_area + u"地闪雷暴日空间分布")
+    out_name = os.path.join(out_path, ''.join([datetime , target_area , u"地闪雷暴日空间分布"]))
     out_type = out_type.lower()
     if out_type in ["jpg", 'gpeg']:
         mapping.ExportToJPEG(mxd, out_name, resolution=200)
@@ -182,13 +183,22 @@ def mappingProcess(target_area, datetime, density_class=None, day_class=10, out_
 if __name__ == "__main__":
     datetime = u"2015年"
     target_area = u"绍兴市"
-    workspace = ''.join([u"D:/bulletinTemp/",datetime,u"/",target_area])
-    # 设置环境
-    if not os.path.exists(workspace):
-        os.makedirs(workspace)
+
+    workpath = ''.join([cwd,u"/bulletinTemp/", datetime])
+    workspace = ''.join([workpath,'/',target_area,'.gdb'])
+    if not arcpy.Exists(workspace):
+        arcpy.CreateFileGDB_management(workpath,''.join([target_area,'.gdb']))
     arcpy.env.workspace = workspace
     arcpy.env.outputCoordinateSystem = arcpy.SpatialReference("WGS 1984")
+    arcpy.env.overwriteOutput = True
+
     # density_class = 10
     # day_class = 10
 
+    start = time.clock()
+    # ***********************测试程序*********************************"
     mappingProcess(target_area, datetime)  # ,density_class, day_class)
+    # ***********************测试程序*********************************"
+    end = time.clock()
+    elapsed = end - start
+    print "Time used: %.6fs, %.6fms" % (elapsed, elapsed * 1000)

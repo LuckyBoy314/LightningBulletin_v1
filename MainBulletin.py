@@ -26,11 +26,13 @@ def mainProcess(origin_data_path, datetime, target_area, density_cell, density_c
                 day_cell, day_class, out_type, out_path=None):
 
     database = DataPreprocess.preProcess(origin_data_path, datetime)
-    workspace = u"D:/bulletinTemp/" + datetime + u"/" + target_area
-    arcpy.env.overwriteOutput = True
     # 设置环境
-    if not os.path.exists(workspace):
-        os.makedirs(workspace)
+    arcpy.env.overwriteOutput = True
+
+    workpath = ''.join([cwd,u"/bulletinTemp/", datetime])
+    workspace = ''.join([workpath,'/',target_area,'.gdb'])
+    if not arcpy.Exists(workspace):
+        arcpy.CreateFileGDB_management(workpath,''.join([target_area,'.gdb']))
     arcpy.env.workspace = workspace
     arcpy.env.outputCoordinateSystem = arcpy.SpatialReference("WGS 1984")
 
@@ -45,7 +47,7 @@ def mainProcess(origin_data_path, datetime, target_area, density_cell, density_c
     out_type =
     out_path =
     """
-    out_path = u"D:/bulletinTemp/" + datetime
+    out_path = ''.join([cwd,u"/bulletinTemp/" , datetime])
     Mapping.mappingProcess(target_area, datetime,out_path=out_path)
 
 

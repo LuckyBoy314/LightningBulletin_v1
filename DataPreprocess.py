@@ -23,7 +23,7 @@ import os
     2.origindata_withOID.shp临时文件
 """
 
-
+cwd = os.getcwd()
 def writeOrignData(infiles, text_table):
     if os.path.isfile(text_table):
         return
@@ -32,12 +32,13 @@ def writeOrignData(infiles, text_table):
         for infile in infiles:
             with open(infile, 'r') as in_f:
                 for line in in_f:
-                    line = line.split()
-                    line[3:8] = [x[5:] for x in line[3:8]]
-                    line[8] = line[8][9:]
-                    s = ','.join(line[1:8]) + '\n'
-                    out_f.write(s)
-#todo.2007年数据有问题
+                    line = line.decode('gb2312').split()
+                    line[3:8] = [x[3:] for x in line[3:8]]
+                    line[8] = line[8][5:]
+                    s = u','.join(line[1:9])
+                    s = u''.join([s,'\n'])
+                    out_f.write(s.encode('utf-8'))
+
 
 def dialogOpenFile():
     master = Tkinter.Tk()
@@ -58,7 +59,7 @@ def FTPOpenFile():
 
 def generateDatabase(text_table):
     # 输出文件名根据输入名确定
-    database = text_table.replace("txt", "shp")
+    database = text_table.replace(".txt", "")
     if arcpy.Exists(database):
         return database
 
@@ -68,27 +69,30 @@ def generateDatabase(text_table):
                                       r"Coordinate Systems\Geographic Coordinate Systems\World\WGS 1984")
 
     # XY event 没有OID，有些操作需要OID，如intersect，有的不需要，如clip
-    originData_withOID = os.path.join(os.path.dirname(text_table), "origindata_withOID.shp")
+    originData_withOID = os.path.join(os.path.dirname(text_table), "origindata_withOID")
     #if arcpy.Exists(originData_withOID):
     #    arcpy.Delete_management(originData_withOID)
     arcpy.CopyFeatures_management(originData, originData_withOID)
 
-    zhejiang = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/浙江_分县"
+    zhejiang = ''.join([cwd,u'/data/LightningBulletin.gdb/浙江_分县'])
     arcpy.Intersect_analysis([originData_withOID, zhejiang], database)
 
-    arcpy.DeleteField_management(database, ["FID_origin", u"FID_浙江", 'Code', 'Shape_Leng', 'Shape_Area'])  # 清理不必要的字段
-    # arcpy.Delete_management(originData_withOID)#删除中间生成的辅助临时文件
+    arcpy.DeleteField_management(database, ["FID_origindata_withOID", u"FID_浙江_分县", 'Code', 'Shape_Leng', 'Shape_Area'])  # 清理不必要的字段
+    arcpy.Delete_management(originData_withOID)#删除中间生成的辅助临时文件
     return database
 
 
 # 同一年的数据 预处理只需要做一次就行了,这个处理应该放在模块函数中解决，而不是放在主模块中
 def preProcess(infiles, datetime):
     # 根据datetime创立工作目录
-    workspace = u"D:/bulletinTemp/" + datetime
+    workpath = ''.join([cwd,u"/bulletinTemp/", datetime])
+    if not os.path.exists(workpath):
+        os.makedirs(workpath)
+    workspace = ''.join([workpath,'/GDB.gdb'])
     if not os.path.exists(workspace):
-        os.makedirs(workspace)
+        arcpy.CreateFileGDB_management(workpath,'GDB.gdb')
 
-    text_table = workspace + "/" + u"data" + datetime + u".txt"
+    text_table = ''.join([workspace , "/" , u"data" , datetime , u".txt"])
     writeOrignData(infiles, text_table)
     database_path = generateDatabase(text_table)
 
@@ -96,7 +100,7 @@ def preProcess(infiles, datetime):
 
 
 if __name__ == "__main__":
-    datetime = u"2015年"
+    datetime = u"2013年"
     infiles = dialogOpenFile()
 
     start = time.clock()
