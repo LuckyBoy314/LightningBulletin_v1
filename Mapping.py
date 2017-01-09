@@ -6,7 +6,7 @@ import arcpy
 import os
 import time
 
-cwd = os.getcwd()
+
 # 默认分成十类
 def dayLegendLabel(start, end, intervals=10):
     L = []
@@ -77,7 +77,7 @@ def densityLegendLabel(min, max, intervals=None):
 
 def mappingProcess(target_area, datetime, density_class=None, day_class=10, out_path=None, out_type="TIFF"):
     # todo.控制densityClass和dayClass最多为14
-
+    cwd = os.getcwd()
     infeature = ''.join([cwd,u"/data/LightningBulletin.gdb/" , target_area])
     mxd_density_path = ''.join([cwd,u"/data/LightningBulletin.gdb/" ,target_area ,u"闪电密度空间分布模板.mxd"])
     mxd_day_path = ''.join([cwd,u"/data/LightningBulletin.gdb/" , target_area , u"地闪雷暴日空间分布模板.mxd"])
@@ -183,6 +183,7 @@ def mappingProcess(target_area, datetime, density_class=None, day_class=10, out_
 if __name__ == "__main__":
     datetime = u"2015年"
     target_area = u"绍兴市"
+    cwd = os.getcwd()
 
     workpath = ''.join([cwd,u"/bulletinTemp/", datetime])
     workspace = ''.join([workpath,'/',target_area,'.gdb'])

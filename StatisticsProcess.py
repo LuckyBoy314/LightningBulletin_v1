@@ -5,19 +5,19 @@
 # """
 #     "越城":
 # """
-# sta = {}
-# workspace =ur'D:\bulletinTemp\2015年\绍兴市'
+
+# workspace =ur'D:\CodingWorkspace\LightningBulletin_v1\bulletinTemp\2015年\绍兴市.gdb'
 # arcpy.env.workspace  = workspace
-# infeature = u"D:/Program Files (x86)/LightningBulletin/LightningBulletin.gdb/绍兴市"
-# ZonalStatisticsAsTable(infeature,'NAME',"lightningDay.tif",'stat_day',"","ALL")
+# infeature = ur"D:\CodingWorkspace\LightningBulletin_v1\data\LightningBulletin.gdb\绍兴市"
+# ZonalStatisticsAsTable(infeature,'NAME',"lightningDay",'stat_day',"","ALL")
 # with arcpy.da.SearchCursor('stat_day',["NAME","MEAN","MIN","MAX"]) as cursor:
 #     for row in cursor:
 #         print row[0][:2],":",row[1],row[2],row[3]
 #
-# ZonalStatisticsAsTable(infeature,'NAME',"lightningDensity.tif",'stat_density',"","ALL")
+# ZonalStatisticsAsTable(infeature,'NAME',"lightningDensity",'stat_density',"","ALL")
 # with arcpy.da.SearchCursor('stat_density',["NAME","MEAN","MIN","MAX"]) as cursor:
 #     for row in cursor:
-#          print row[0][:2],":",row[1],row[2],row[3]
+#          print row[0][:2],":",row[1]/100,row[2]/100,row[3]/100
 
 # import arcpy
 #

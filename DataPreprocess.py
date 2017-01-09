@@ -23,7 +23,6 @@ import os
     2.origindata_withOID.shp临时文件
 """
 
-cwd = os.getcwd()
 def writeOrignData(infiles, text_table):
     if os.path.isfile(text_table):
         return
@@ -74,6 +73,7 @@ def generateDatabase(text_table):
     #    arcpy.Delete_management(originData_withOID)
     arcpy.CopyFeatures_management(originData, originData_withOID)
 
+    cwd = os.getcwd()
     zhejiang = ''.join([cwd,u'/data/LightningBulletin.gdb/浙江_分县'])
     arcpy.Intersect_analysis([originData_withOID, zhejiang], database)
 
@@ -81,10 +81,10 @@ def generateDatabase(text_table):
     arcpy.Delete_management(originData_withOID)#删除中间生成的辅助临时文件
     return database
 
-
 # 同一年的数据 预处理只需要做一次就行了,这个处理应该放在模块函数中解决，而不是放在主模块中
 def preProcess(infiles, datetime):
     # 根据datetime创立工作目录
+    cwd = os.getcwd()
     workpath = ''.join([cwd,u"/bulletinTemp/", datetime])
     if not os.path.exists(workpath):
         os.makedirs(workpath)

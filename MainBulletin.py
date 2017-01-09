@@ -21,7 +21,7 @@ import sys
     统计信息
 """
 
-#todo 字符串连接需要优化
+
 def mainProcess(origin_data_path, datetime, target_area, density_cell, density_class,
                 day_cell, day_class, out_type, out_path=None):
 

@@ -5,7 +5,7 @@ import time
 import arcpy
 from arcpy.sa import *
 
-cwd = os.getcwd()
+
 # 获取当前工作区域的范围
 def getExtents(infeature):
     extents = [row[0].extent for row in arcpy.da.SearchCursor(infeature, "SHAPE@")]
@@ -120,7 +120,7 @@ def lightningDay(clip_feature, grid_feature, cell_size):
 def geoProcess(target_area, origin_data,  density_cell="10", day_cell="15"):
     #if arcpy.Exists("lightningDay") and arcpy.Exists("lightningDensity"):
     #   return
-
+    cwd = os.getcwd()
     infeature = ''.join([cwd,u'/data/LightningBulletin.gdb/',target_area])
     # 获取当前extent
     extents = getExtents(infeature)
@@ -151,14 +151,9 @@ def geoProcess(target_area, origin_data,  density_cell="10", day_cell="15"):
 if __name__ == "__main__":
     datetime = u"2015年"
     target_area = u"绍兴市"
+    cwd = os.getcwd()
 
     #todo 新建数据库占用了十几秒的时间，可以考虑在之前并行处理
-    # workpath = ''.join([cwd,u"/bulletinTemp/", datetime,'/GDB.gdb'])
-    # workspace = ''.join([workpath,u'/',target_area])
-    # if not arcpy.Exists(workspace):
-    #     arcpy.CreateFeatureDataset_management(workpath,target_area,arcpy.SpatialReference("WGS 1984"))
-    # arcpy.env.workspace = workspace
-    # arcpy.env.overwriteOutput = True
     workpath = ''.join([cwd,u"/bulletinTemp/", datetime])
     workspace = ''.join([workpath,'/',target_area,'.gdb'])
     if not arcpy.Exists(workspace):
