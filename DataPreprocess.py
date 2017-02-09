@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+#import tkinter.filedialog as tkFileDialog
 import tkFileDialog
 import time
+#import tkinter as Tkinter
 import Tkinter
 import arcpy
 import os
@@ -105,8 +107,8 @@ if __name__ == "__main__":
 
     start = time.clock()
     # ***********************测试程序*********************************"
-    print preProcess(infiles, datetime)
+    print(preProcess(infiles, datetime))
     # ***********************测试程序*********************************"
     end = time.clock()
     elapsed = end - start
-    print "Time used: %.6fs, %.6fms" % (elapsed, elapsed * 1000)
+    print("Time used: %.6fs, %.6fms" % (elapsed, elapsed * 1000))

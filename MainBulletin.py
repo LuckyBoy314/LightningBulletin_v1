@@ -21,7 +21,7 @@ import sys
     统计信息
 """
 
-
+cwd = os.getcwd()
 def mainProcess(origin_data_path, datetime, target_area, density_cell, density_class,
                 day_cell, day_class, out_type, out_path=None):
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         #kws = eval(parms)
         kws = ast.literal_eval(sys.argv[1])
         mainProcess(**kws)
-    except Exception,inst:
+    except Exception as inst:
         text_table = u'D:/ceshi.txt'
         with open(text_table, 'w') as out_f:
             out_f.write(unicode(chardet.detect(sys.argv[1])))
