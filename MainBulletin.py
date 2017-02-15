@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import DataPreprocess
-import GeoProcess
-import Mapping
+from DataPreprocess import preProcess
+from GeoProcess import geoProcess
+from Mapping import mappingProcess
 import os
 import arcpy
 import sys
@@ -25,7 +25,7 @@ cwd = os.getcwd()
 def mainProcess(origin_data_path, datetime, target_area, density_cell, density_class,
                 day_cell, day_class, out_type, out_path=None):
 
-    database = DataPreprocess.preProcess(origin_data_path, datetime)
+    database = preProcess(origin_data_path, datetime)
     # 设置环境
     arcpy.env.overwriteOutput = True
 
@@ -37,7 +37,7 @@ def mainProcess(origin_data_path, datetime, target_area, density_cell, density_c
     arcpy.env.outputCoordinateSystem = arcpy.SpatialReference("WGS 1984")
 
     # 地理处理，生成作图文件
-    GeoProcess.geoProcess(target_area, database, density_cell, day_cell)
+    geoProcess(target_area, database, density_cell, day_cell)
 
     # 地图处理
     """
@@ -48,7 +48,7 @@ def mainProcess(origin_data_path, datetime, target_area, density_cell, density_c
     out_path =
     """
     out_path = ''.join([cwd,u"/bulletinTemp/" , datetime])
-    Mapping.mappingProcess(target_area, datetime,out_path=out_path)
+    mappingProcess(target_area, datetime,out_path=out_path)
 
 
 if __name__ == "__main__":

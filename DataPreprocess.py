@@ -102,7 +102,7 @@ def preProcess(infiles, datetime):
 
 
 if __name__ == "__main__":
-    datetime = u"2013年"
+    datetime = u"2015年"
     infiles = dialogOpenFile()
 
     start = time.clock()

@@ -7,7 +7,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-import MainBulletin
+from MainBulletin import mainProcess
 from PyQt5.QtWidgets import(QFileDialog, QMainWindow, QGraphicsView, QGraphicsScene,
                              QMessageBox,QDesktopWidget,QSizePolicy,QDialog,QWidget,
                             QVBoxLayout,QHBoxLayout,QPushButton,QSpacerItem,QSpinBox,
@@ -31,7 +31,7 @@ class WorkThread(QObject):
         self.timer.timeout.connect(self.timeOut)
 
     def beginRun(self, in_parameters):
-        self.p = Process(target=MainBulletin.mainProcess, kwargs=in_parameters)
+        self.p = Process(target=mainProcess, kwargs=in_parameters)
         self.p.start()
         self.timer.start(1000)
 
