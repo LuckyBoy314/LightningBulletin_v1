@@ -58,7 +58,7 @@ def FTPOpenFile():
     pass
 
 
-def generateDatabase(text_table):
+def generateDatabase(text_table, superior_region):
     # 输出文件名根据输入名确定
     database = text_table.replace(".txt", "")
     if arcpy.Exists(database):
@@ -76,15 +76,15 @@ def generateDatabase(text_table):
     arcpy.CopyFeatures_management(originData, originData_withOID)
 
     cwd = os.getcwd()
-    zhejiang = ''.join([cwd,u'/data/LightningBulletin.gdb/浙江_分县'])
+    zhejiang = ''.join([cwd,u'/data/LightningBulletin.gdb/', superior_region])
     arcpy.Intersect_analysis([originData_withOID, zhejiang], database)
 
-    arcpy.DeleteField_management(database, ["FID_origindata_withOID", u"FID_浙江_分县", 'Code', 'Shape_Leng', 'Shape_Area'])  # 清理不必要的字段
+    arcpy.DeleteField_management(database, ["FID_origindata_withOID", u"FID_"+ superior_region, 'Code', 'Shape_Leng', 'Shape_Area'])  # 清理不必要的字段
     arcpy.Delete_management(originData_withOID)#删除中间生成的辅助临时文件
     return database
 
 # 同一年的数据 预处理只需要做一次就行了,这个处理应该放在模块函数中解决，而不是放在主模块中
-def preProcess(infiles, datetime):
+def preProcess(infiles, datetime, superior_region):
     # 根据datetime创立工作目录
     cwd = os.getcwd()
     workpath = ''.join([cwd,u"/bulletinTemp/", datetime])
@@ -96,7 +96,11 @@ def preProcess(infiles, datetime):
 
     text_table = ''.join([workspace , "/" , u"data" , datetime , u".txt"])
     writeOrignData(infiles, text_table)
-    database_path = generateDatabase(text_table)
+    database_path = generateDatabase(text_table, superior_region)
+
+    #建立数据库,以供SQL查询
+    arcpy.CreatePersonalGDB_management(workpath, "SQL.mdb")#在指定位置建立个人数据库
+    arcpy.FeatureClassToGeodatabase_conversion(database_path,''.join([workpath,'/SQL.mdb']))#将文件数据库中的要素类导入到个人数据库
 
     return database_path
 
@@ -104,10 +108,10 @@ def preProcess(infiles, datetime):
 if __name__ == "__main__":
     datetime = u"2015年"
     infiles = dialogOpenFile()
-
+    superior_region = u'浙江_分县'
     start = time.clock()
     # ***********************测试程序*********************************"
-    print(preProcess(infiles, datetime))
+    print(preProcess(infiles, datetime, superior_region))
     # ***********************测试程序*********************************"
     end = time.clock()
     elapsed = end - start

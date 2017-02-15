@@ -19,11 +19,6 @@
 #     for row in cursor:
 #          print row[0][:2],":",row[1]/100,row[2]/100,row[3]/100
 
-# import arcpy
-#
-# arcpy.CreatePersonalGDB_management(''.join([cwd,'/data']), "GDB.mdb")
-# data = u'D:/bulletinTemp/2015年/data2015年.shp'
-# arcpy.FeatureClassToGeodatabase_conversion(data,''.join([cwd,'/data','/GDB.mdb']))
 
 import pyodbc
 import os
@@ -41,13 +36,15 @@ region_area = {u'越城区':498.0,u'柯桥区':1041.0,u'上虞区':1403.0,u'诸�
 #todo 各地区面积要包括海域面积
 
 cwd = os.getcwd()  # 获取当前工作目录，便于程序移植
+
 # 链接数据库
+database = ''.join([cwd, '/bulletinTemp/',str(year),'/SQL.mdb;'])
+
+
 db = pyodbc.connect(''.join(['DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};',
-                             'DBQ=', cwd, '/data/GDB.mdb;']))  # Uid=Admin;Pwd=;')
+                             'DBQ=', database]))  # Uid=Admin;Pwd=;')
 cursor = db.cursor()
-
 data_table = ''.join(['data', str(year), '年'])  # sql查询语句不用使用Unicode
-
 # 打开Excel应用程序
 excel = DispatchEx('Excel.Application')
 excel.Visible = False
@@ -81,7 +78,7 @@ try:
 
     #将SQL查询结果写入Excel
     sheet = workbook.Worksheets(u'省分区统计')
-    for row in xrange(2, 13):
+    for row in range(2, 13):
         sheet.Cells(row, 1).Value = results[sheet.Cells(row, 2).Value]
 
     sum_region = results[target_area]  #本地区地闪总数

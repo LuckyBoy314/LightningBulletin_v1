@@ -385,11 +385,12 @@ class MainWindow(QMainWindow):
         self.in_parameters[u'origin_data_path'] = fnames[0]
 
     def savePic(self):
-        densityPic = ''.join([cwd,u'/bulletinTemp/',
-            self.in_parameters[u'datetime'],u'/', self.in_parameters[u'datetime'],
+        densityPic = ''.join([cwd,u'/bulletinTemp/',self.in_parameters[u'datetime'],u'/',
+            self.in_parameters[u'target_area'],'.gdb',u'/',self.in_parameters[u'datetime'],
             self.in_parameters[u'target_area'],u'闪电密度空间分布.tif'])
-        dayPic = ''.join([cwd,u'D:/bulletinTemp/',
-            self.in_parameters[u'datetime'],u'/', self.in_parameters[u'datetime'],
+
+        dayPic = ''.join([cwd,u'/bulletinTemp/',self.in_parameters[u'datetime'],u'/',
+            self.in_parameters[u'target_area'],'.gdb',u'/',self.in_parameters[u'datetime'],
             self.in_parameters[u'target_area'],u'地闪雷暴日空间分布.tif'])
 
         directory = QFileDialog.getExistingDirectory(self,u'请选择图片保存位置',

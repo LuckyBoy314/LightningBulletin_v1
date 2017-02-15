@@ -23,9 +23,9 @@ import sys
 
 cwd = os.getcwd()
 def mainProcess(origin_data_path, datetime, target_area, density_cell, density_class,
-                day_cell, day_class, out_type, out_path=None):
+                day_cell, day_class, out_type, out_path=None,superior_region = u'浙江_分县'):
 
-    database = preProcess(origin_data_path, datetime)
+    database = preProcess(origin_data_path, datetime, superior_region)
     # 设置环境
     arcpy.env.overwriteOutput = True
 
@@ -47,7 +47,7 @@ def mainProcess(origin_data_path, datetime, target_area, density_cell, density_c
     out_type =
     out_path =
     """
-    out_path = ''.join([cwd,u"/bulletinTemp/" , datetime])
+    #out_path = ''.join([cwd,u"/bulletinTemp/" , datetime])
     mappingProcess(target_area, datetime,out_path=out_path)
 
 
